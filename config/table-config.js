@@ -35,3 +35,30 @@ export const tableIcons = {
     ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
 };
+
+
+export const localizationClasses = {
+    header: {actions: 'Ações'},
+    body: {emptyDataSourceMessage: "Nenhuma turma."},
+    pagination: {
+      searchTooltip: "Buscar",
+      searchPlaceholder: "Buscar",
+      labelRowsSelect: "Linhas",
+      labelRowsPerPage: "Linhas por página",
+      firstAriaLabel: "Primeira Página",
+      firstTooltip: "Primeira Página",
+      previousAriaLabel: "Página Anterior",
+      previousTooltip: "Página Anterior",
+      nextAriaLabel: "Próxima Página",
+      nextTooltip: "Próxima Página",
+      lastAriaLabel: "Última Página",
+      lastTooltip: "Última Página",
+    },
+    toolbar: {
+      searchTooltip: "Buscar",
+      searchPlaceholder: "Buscar",
+    }
+};
+
+
+

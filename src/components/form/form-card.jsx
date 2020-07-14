@@ -24,6 +24,11 @@ const useStyles = makeStyles({
   pos: {
     marginBottom: 12,
   },
+  cardTitle: {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
+  }
 });
 
 export default function FormCard({
@@ -32,10 +37,12 @@ export default function FormCard({
   curriculum, 
   period, 
   isLoading,
-  isStudent, 
+  isStudent,
+  isError,
   status, 
   published_at, 
   published_until,
+  setSnackbarStatus
 }) {
   const classes = useStyles()
   const actionProps = {
@@ -43,7 +50,8 @@ export default function FormCard({
     status, 
     published_at, 
     published_until,
-    isStudent
+    isStudent,
+    setSnackbarStatus
   }
   
   return (
@@ -52,7 +60,7 @@ export default function FormCard({
         <Typography className={classes.title} color="textSecondary" gutterBottom>
           {isLoading ? <Skeleton animation="wave" />  : curriculum && curriculum.name}
         </Typography>
-        <Typography color="primary" variant="h5" component="h2">
+        <Typography className={classes.cardTitle} color="primary" variant="h6" component="h2">
           {isLoading ? <Skeleton animation="wave" />  : title}
         </Typography>
         <Typography className={classes.pos} color="textSecondary">
@@ -61,26 +69,43 @@ export default function FormCard({
       </CardContent>
       <CardActions>
       {isLoading ? <Skeleton animation="wave" />  
-        :  <ActionButtons {...actionProps} /> 
+        : !isError && <ActionButtons {...actionProps} /> 
       }
-      </CardActions>{console.log({isStudent})}
+      </CardActions>
     </Card>
   );
 }
 
-function ActionButtons({ id, status, published_until, isStudent }) {
+function ActionButtons({ id, status, published_at, published_until, isStudent, setSnackbarStatus }) {
   const { push } = useHistory()
   const { path } = useRouteMatch()
   return (
     <>
       {!isStudent ?
         <> 
-        <Button color="primary" variant="outlined" onClick={()=> push(`${path}/${id}`)} size="small">Visualizar</Button>
-        { published_until && <Button color="primary" variant="outlined" onClick={()=> push(`/answers/${id}`)} size="small">Respostas</Button> }
-        <AlertPublish id={id} status={status} published_until={published_until} />
+          <Button 
+            color="primary" 
+            variant="outlined" 
+            onClick={() => push(`${path}/${id}`)} 
+            size="small">
+              Visualizar
+          </Button>
+          <AlertPublish 
+            id={id} 
+            status={status} 
+            published_at={published_at} 
+            published_until={published_until} 
+            setSnackbarStatus={setSnackbarStatus}
+          />
         </>
       :
-        <Button color="primary" variant="outlined" onClick={()=> push(`${path}/${id}`)} size="small">Responder</Button>
+        <Button 
+          color="primary" 
+          variant="outlined" 
+          onClick={() => push(`${path}/${id}`)} 
+          size="small">
+            Responder
+        </Button>
       }
     </>
   )

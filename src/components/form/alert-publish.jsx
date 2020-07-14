@@ -5,17 +5,23 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { useHistory } from 'react-router-dom'
 import { axiosInstance as axios } from '../../../config/axios';
 
 
-export default function AlertPublish({ id, status, published_until }) {
+export default function AlertPublish({ id, status, published_at, setSnackbarStatus }) {
   const [open, setOpen] = useState(false);
   const [newStatus, setNewStatus] = useState(false);
   const [updatedStatus, setUpdatedStatus] = useState(false);
   const { put } = axios
+  const { push } = useHistory()
 
   const handleClickOpen = () => {
-    setOpen(true);
+    if(published_at && published_at.length > 0) {
+      handlePublish()
+    } else {
+      setOpen(true);
+    }
   };
 
   const handleClose = () => {
@@ -26,11 +32,19 @@ export default function AlertPublish({ id, status, published_until }) {
     try {
       const request = await put(`/coord/formulary/${id}/publish`)
       handleClose()
+      setSnackbarStatus({
+        open: true, 
+        message: "Formulário publicado com sucesso."
+      })
       setNewStatus(true)
       setUpdatedStatus(request.data.status)
     } catch (error) {
       console.log(error)
       handleClose()
+      setSnackbarStatus({ 
+        open: true, 
+        message: "Ocorreu um erro. Tente novamente mais tarde."
+      })
     }
   }
 
@@ -38,25 +52,45 @@ export default function AlertPublish({ id, status, published_until }) {
     try {
       const request = await put(`/coord/formulary/${id}/unpublish`)
       handleClose()
+      setSnackbarStatus({
+        open: true, 
+        message: "Publicação encerrada com sucesso."
+      })
       setNewStatus(true)
       setUpdatedStatus(request.data.status)
       
     } catch (error) {
-      console.log(error)
       handleClose()
-    }
+      setSnackbarStatus({ 
+        open: true, 
+        message: "Ocorreu um erro. Tente novamente mais tarde."
+      })
+    } 
   }
 
   let newUpdatedStatus = newStatus ?  updatedStatus : status
 
+  const AnswerButton = () => (
+    <Button 
+      color="primary" 
+      variant="outlined" 
+      onClick={() => push(`/answers/${id}`)} 
+      size="small">
+        Respostas
+    </Button>
+  ) 
+
   return (
     <>
     { newUpdatedStatus ?
-      <Button color="primary" variant="outlined" size="small" onClick={handleUnpublish}>
-        Encerrar Publicação
-      </Button>
+      <>
+        <Button color="primary" variant="outlined" size="small" onClick={handleUnpublish}>
+          Encerrar Publicação
+        </Button>
+      </>
       :
       <>
+      { published_at && <AnswerButton /> }
       <Button color="primary" variant="contained" size="small" onClick={handleClickOpen}>
         Publicar
       </Button>

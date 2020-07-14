@@ -39,7 +39,7 @@ export default function Main(props) {
           variant="h4" 
           component="h5"
           >
-            {props.title}
+          {props.title}
         </Typography>
         {props.children}
       </main>

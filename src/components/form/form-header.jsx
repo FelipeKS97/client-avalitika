@@ -21,8 +21,6 @@ import Select from '@material-ui/core/Select';
 import { axiosInstance as axios } from '../../../config/axios'
 import { useRouteMatch, useHistory } from "react-router-dom";
 
-
-
 const useStyles = makeStyles((theme) => ({
   appBar: {
     position: 'relative',
@@ -42,7 +40,7 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function FullScreenDialog() {
+export default function EditFormHeader({ isCreate, formData, setIsUpdate, setSnackbarStatus }) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('')
@@ -51,8 +49,8 @@ export default function FullScreenDialog() {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const { path, url } = useRouteMatch();
-  const { push } = useHistory()
-  const { get, post } = axios
+  const { push, replace } = useHistory()
+  const { get, post, put } = axios
 
   useEffect(() => {
     const fetchData = async () => {
@@ -95,37 +93,85 @@ export default function FullScreenDialog() {
       try {
         const reqForm = await post(`/coord/formulary`, obj)
         handleClose()
-        console.log(reqForm.data)
         push(`/forms/${reqForm.data.id}`)     
       } catch (error) {
-        setIsError(true);
+        setIsError(true)
         handleClose()
+        setSnackbarStatus({ 
+          open: true, 
+          message: "Ocorreu um erro, tente mais tarde."
+        })
       }
     }
-    setIsLoading(false);
+    setIsLoading(false)
+  }
+
+  const handleEdit = async () => {
+    setIsError(false);
+    setIsLoading(true);
+    if(period_id && curriculum_id && title) {
+      let obj = {
+        period_id,
+        curriculum_id,
+        title,
+        json_format: JSON.parse(formData.json_format)
+      }
+      try {
+        const reqForm = await put(`/coord/formulary/${formData.id}`, obj)
+        setIsUpdate(true)
+        handleClose()
+        replace(`/forms/${formData.id}`)   
+      } catch (error) {
+        setIsError(true)
+        handleClose()
+        setSnackbarStatus({ 
+          open: true, 
+          message: "Ocorreu um erro, tente mais tarde."
+        })
+      }
+    }
+    setIsLoading(false)
   }
 
 
   return (
     <div>
-      {/* <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Novo Formulário
-      </Button> */}
-      <Fab onClick={handleClickOpen} className={classes.fab} color="primary" aria-label="Novo Formulário">
-        <AddIcon />
-      </Fab>
+      { isCreate ?
+        <Fab onClick={handleClickOpen} className={classes.fab} color="primary" aria-label="Novo Formulário">
+          <AddIcon />
+        </Fab>
+        :
+        <Button className="pull-right" style={{marginRight: '10px'}} variant="outlined" color="primary" onClick={handleClickOpen}>
+          Editar Cabeçalho
+        </Button>
+      }
       <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
         <AppBar className={classes.appBar}>
           <Toolbar>
             <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
               <CloseIcon />
             </IconButton>
-            <Typography variant="h6" className={classes.title}>
-              Novo Formulário
-            </Typography>
-            <Button autoFocus color="inherit" onClick={handleCreate}>
-              Criar
-            </Button>
+
+            {
+              isCreate ?
+              <> 
+              <Typography variant="h6" className={classes.title}>
+                Novo Formulário
+              </Typography>
+              <Button autoFocus color="inherit" onClick={handleCreate}>
+                Criar
+              </Button>
+              </>
+              :
+              <>
+              <Typography variant="h6" className={classes.title}>
+               Cabeçalho do Formulário
+              </Typography>
+              <Button autoFocus color="inherit" onClick={handleEdit}>
+                Editar
+              </Button>
+              </>
+            }
           </Toolbar>
         </AppBar>
         <List>

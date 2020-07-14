@@ -1,11 +1,11 @@
 import React, { useEffect, useState} from 'react';
 import clsx from 'clsx';
-
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
+
 import { useStyles } from './mainStyles'
 import Main from './main'
 import { axiosInstance as axios } from '../../../config/axios'
@@ -60,7 +60,6 @@ export default function MainContainer({ history }) {
         <Grid key={i} item xs={12} md={4} lg={3}>
             <ButtonBase className={classes.paperButton} onClick={() => history.push(d.location)}>
                 <Paper className={classes.paperButton}>
-                {/* <Orders /> */}
                     <img className={classes.paperImage} src={d.icon} alt={d.name} />
                     <Typography color="primary" variant="h4" component="h5">
                         {d.name}

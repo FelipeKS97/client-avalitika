@@ -5,6 +5,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { EventEmitter } from 'fbemitter';
+import Button from '@material-ui/core/Button';
+
 import FormValidator from './form-validator';
 import FormElements from './form-elements';
 
@@ -290,8 +292,8 @@ export default class ReactForm extends React.Component {
       display: 'none',
     };
 
-    const actionName = (this.props.action_name) ? this.props.action_name : 'Submit';
-    const backName = (this.props.back_name) ? this.props.back_name : 'Cancel';
+    const actionName = (this.props.action_name) ? this.props.action_name : 'Enviar';
+    const backName = (this.props.back_name) ? this.props.back_name : 'Cancelar';
 
     return (
       <div>
@@ -308,7 +310,7 @@ export default class ReactForm extends React.Component {
             {items}
             <div className='btn-toolbar'>
               { !this.props.hide_actions &&
-                <input type='submit' className='btn btn-school btn-big btn-agree pull-right' value={actionName} />
+                <Button color="primary" variant="contained" type='submit' className=' pull-right' value={actionName}>{actionName}</Button>
               }
               { !this.props.hide_actions && this.props.back_action &&
                 <a href={this.props.back_action} className='btn btn-default btn-cancel btn-big'>{backName}</a>

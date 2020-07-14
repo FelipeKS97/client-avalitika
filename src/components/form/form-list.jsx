@@ -5,14 +5,15 @@ import Grid from '@material-ui/core/Grid';
 import { useStyles } from './formStyles'
 import Main from '../main/main'
 import FormCard from './form-card'
-import CreateForm from './create-form'
+import EditFormHeader from './form-header'
 import { axiosInstance as axios } from '../../../config/axios'
+import useCustomSnackbar from '../../hooks/CustomSnackbar'
 import PaginationContainer from '../pagination/pagination'
-
 
 export default function FormListContainer() {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [snackbar, setSnackbarStatus] = useCustomSnackbar()
   const [isUpdate, setIsUpdate] = useState(false);
   const [formList, setFormList] = useState([])
   const classes = useStyles();
@@ -24,14 +25,22 @@ export default function FormListContainer() {
       setIsLoading(true);
       try {
         const reqForms = await get('/coord/formulary')
+        //   params: {
+        //     curriculum_id: discipline.id,
+        //     period_id: 1
+        //   }
+        // })
         setFormList(reqForms.data.data)   
       } catch (error) {
         setIsError(true);
+        setSnackbarStatus({ 
+          open: true, 
+          message: "Ocorreu um erro no carregamento."
+        })
       }
       setIsLoading(false);
     }
     fetchData()
-    console.log({isUpdate})
 
     if(isUpdate) {
       fetchData()
@@ -47,17 +56,25 @@ export default function FormListContainer() {
             alignItems="top"
         >{formList.length > 0 ?
             formList.map((el, i) => (
-                <Grid key={i} item xs={12} md={4} lg={3}>
-                  <FormCard {...el}/>
-                </Grid>
+              <Grid key={i} item xs={12} md={4} lg={3}>
+                <FormCard 
+                  setSnackbarStatus={setSnackbarStatus} 
+                  isError={isError} 
+                  {...el}
+                />
+              </Grid>
             ))
             :
-            <Grid item xs={12} md={4} lg={3}>
-              <FormCard isLoading={isLoading}/>
-            </Grid>
+            <> {Array.from({ length: 8 }, (x, i) => (
+                <Grid key={i} item xs={12} md={4} lg={3}>
+                  <FormCard isError={isError} isLoading={isLoading}/>
+                </Grid>
+              ))}
+            </>
         }
           </Grid>
-          <CreateForm />
+          <EditFormHeader setSnackbarStatus={setSnackbarStatus} isCreate/>
+          {snackbar}
           {/* <PaginationContainer /> */}
       </Container>
     </Main>

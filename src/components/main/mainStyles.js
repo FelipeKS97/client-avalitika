@@ -90,6 +90,9 @@ export const useStyles = makeStyles((theme) => ({
     paperImage: {
       padding: '5rem'
     },
+    paperIcon: {
+      width: '23px'
+    },
     mainTitle: {
       padding: '1.5rem',
       marginLeft: '1.5vw',

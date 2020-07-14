@@ -1,7 +1,11 @@
 import React from 'react';
 import store from '../../stores/form-store';
 import ReactFormGenerator from './form';
-import { useStyles } from './formStyles'
+import { useStyles } from './formStyles';
+import EditFormHeader from './form-header';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 const answers = {};
 // const answers = {
@@ -32,7 +36,7 @@ export default class Demobar extends React.Component {
 
     store.subscribe(state => update(state.data));
 
-    // console.log(this.state.data)
+    console.log({store})
   }
   
 
@@ -75,61 +79,50 @@ export default class Demobar extends React.Component {
   }
 
   render() {
-    let modalClass = 'modal';
-    if (this.state.previewVisible) {
-      modalClass += ' show';
-    }
-
-    let shortModalClass = 'modal short-modal';
-    if (this.state.shortPreviewVisible) {
-      shortModalClass += ' show';
-    }
-
+    const { roPreviewVisible } = this.state
     let roModalClass = 'modal ro-modal';
-    if (this.state.roPreviewVisible) {
+    if (roPreviewVisible) {
       roModalClass += ' show';
     }
 
     const addIndex = () => {
       return { zIndex: 3000 }
     }
+    const { formData } = this.props
 
     return (
       <div className="clearfix" style={{ margin: '10px', width: '70%' }}>
-        {/* <h4 className="pull-left">Formulário Personalizado</h4> */}
-        <button className="btn btn-primary pull-right" style={{ marginRight: '10px' }} onClick={this.showPreview.bind(this)}>Ver Formulário</button>
-        <button className="btn btn-default pull-right" style={{ marginRight: '10px' }} onClick={this.showShortPreview.bind(this)}>Alternate/Short Form</button>
-        <button className="btn btn-default pull-right" style={{ marginRight: '10px' }} onClick={this.showRoPreview.bind(this)}>Read Only Form</button>
+        {/* <h4 className="pull-left">{store.state.title}</h4> */}
+        <Button 
+          variant="outlined" 
+          color="primary" 
+          className="pull-right" 
+          style={{ marginRight: '5px' }} 
+          onClick={this.showRoPreview.bind(this)}
+        > Visualizar Formulário
+        </Button>
 
-        { this.state.previewVisible &&
-          <div style={addIndex()} className={modalClass}>
-            <div className="modal-dialog">
-              <div className="modal-content">
-                <ReactFormGenerator
-                  download_path=""
-                  back_action="/"
-                  back_name="Voltar"
-                  answer_data={answers}
-                  action_name="Salvar"
-                  form_action="/api/form"
-                  form_method="POST"
-                  skip_validations={true}
-                  onSubmit={this._onSubmit}
-                  variables={this.props.variables}
-                  data={this.state.data} />
-
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-default" data-dismiss="modal" onClick={this.closePreview.bind(this)}>Fechar</button>
-                </div>
-              </div>
-            </div>
-          </div>
+        {
+          formData && !formData.published_at &&
+          <EditFormHeader 
+            setIsUpdate={this.props.setIsUpdate} 
+            formData={this.props.formData} 
+          />
         }
-
-        { this.state.roPreviewVisible &&
+        { roPreviewVisible &&
           <div style={addIndex()} className={roModalClass}>
             <div className="modal-dialog">
               <div className="modal-content">
+                <div style={{
+                  paddingBottom: '1rem',
+                  textAlign: 'right',
+                  borderBottom: '1px solid #e5e5e5'
+                }}>
+                  <IconButton onClick={() => this.closePreview()} data-dismiss="modal" aria-label="Fechar">
+                    <CloseIcon />
+                  </IconButton>
+                </div>
+
                 <ReactFormGenerator
                   download_path=""
                   back_action="/"
@@ -142,33 +135,6 @@ export default class Demobar extends React.Component {
                   variables={this.props.variables}
                   hide_actions={true}
                   data={this.state.data} />
-
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-default" data-dismiss="modal" onClick={this.closePreview.bind(this)}>Fechar</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        }
-
-        { this.state.shortPreviewVisible &&
-          <div style={addIndex()} className={shortModalClass}>
-            <div className="modal-dialog">
-              <div className="modal-content">
-                <ReactFormGenerator
-                  download_path=""
-                  back_action=""
-                  answer_data={answers}
-                  form_action="/"
-                  form_method="POST"
-                  data={this.state.data}
-                  display_short={true}
-                  variables={this.props.variables}
-                  hide_actions={false} />
-
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-default" data-dismiss="modal" onClick={this.closePreview.bind(this)}>Fechar</button>
-                </div>
               </div>
             </div>
           </div>

@@ -4,6 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 
+import useCustomSnackbar from '../../hooks/CustomSnackbar'
 import { axiosInstance as axios } from '../../../config/axios'
 import { useStyles } from './classesStyles'
 import Main from '../main/main'
@@ -11,10 +12,11 @@ import ClassesTable from './ClassesTable'
 
 export default function ClassesContainer() {
   const classes = useStyles();
-  const [period, setPeriod] = useState({})
+  const [period, setPeriod] = useState()
   const [periodList, setPeriodList] = useState([])
-  const [curriculum, setCurriculum] = useState({})
+  const [curriculum, setCurriculum] = useState()
   const [curriculumList, setCurriculumList] = useState([])
+  const [snackbar, setSnackbarStatus] = useCustomSnackbar()
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const { get } = axios
@@ -30,7 +32,10 @@ export default function ClassesContainer() {
         setCurriculumList(reqCurricula.data)    
       } catch (error) {
         setIsError(true);
-        // console.log('deu erro')
+        setSnackbarStatus({ 
+          open: true, 
+          message: "Ocorreu um erro no carregamento."
+        })
       }
       setIsLoading(false);
     }
@@ -56,7 +61,6 @@ export default function ClassesContainer() {
               <Grid item xs={6} md={10} lg={10}>
                 <Autocomplete
                   {...defaultProps}
-                  //className={classes.select}
                   classes={{paper: classes.paper}}
                   id="Grade Curricular"
                   debug
@@ -69,7 +73,6 @@ export default function ClassesContainer() {
               <Grid item xs={2} md={2} lg={2}>
                 <Autocomplete
                   {...defaultPeriodProps}
-                  //className={classes.select}
                   classes={{paper: classes.paper}}
                   id="Período"
                   defaultValue={'2020.1'}
@@ -83,10 +86,12 @@ export default function ClassesContainer() {
               {period && curriculum &&          
                 <ClassesTable 
                   period={period}
-                  curriculum={curriculum} 
+                  curriculum={curriculum}
+                  setSnackbarStatus={setSnackbarStatus}
                 />
               }
           </Grid>
+          {snackbar}
       </Container>
     </Main>
   );

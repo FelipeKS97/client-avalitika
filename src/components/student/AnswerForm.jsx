@@ -3,6 +3,7 @@ import Container from '@material-ui/core/Container';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
+import useCustomSnackbar from '../../hooks/CustomSnackbar'
 import { useParams } from "react-router-dom";
 import { useHistory, useRouteMatch } from "react-router-dom";
 
@@ -23,6 +24,7 @@ export default function AnswerForm() {
   const [disciplineList, setDisciplineList] = useState([])
   const [professor, setProfessor] = useState()
   const [professorList, setProfessorList] = useState([])
+  const [snackbar, setSnackbarStatus] = useCustomSnackbar() 
   const classes = useStyles();
   const { id } = useParams()
   const { push } = useHistory()
@@ -31,12 +33,19 @@ export default function AnswerForm() {
 
   useEffect(() => {
     const fetchData = async () => {
+      try {
         const reqInfo = await get('/coord/info')
         setPeriod(reqInfo.data[0])
         const reqForm = await get(`/student/formulary/${id}`)
         setForm(reqForm.data)
         const reqDisciplines = await get(`/student/disciplines?curriculum_id=${reqForm.data.curriculum_id}`)
         setDisciplineList(reqDisciplines.data.data)
+      } catch (error) {
+        setSnackbarStatus({ 
+          open: true, 
+          message: "Ocorreu um erro no carregamento."
+        })
+      }
     }
     id && fetchData()
   },[])
@@ -72,23 +81,29 @@ export default function AnswerForm() {
 
   async function sendAnswers(json_answer) {
       if(discipline && period && professor) {
-          let obj = {
-              discipline_id: discipline.id,
-              professor_id: professor.professor_id,
-              period_id: period.id,
-              verification_id: "2015103147",
-              formulary_id: parseInt(id),
-              json_answer
-          }
-          // console.log(obj)
+        let randomNumber = Math.floor((Math.random() * 99809875) + 1);
+        let obj = {
+            discipline_id: discipline.id,
+            professor_id: professor.professor_id,
+            period_id: period.id,
+            verification_id: `${randomNumber}`,
+            formulary_id: parseInt(id),
+            json_answer
+        }
 
-          try {
-            const req = await post('/student/formulary', obj)
-            alert("Resposta submetida com sucesso.")
-            push(`${path}`)
-          } catch (error) {
-            console.log({error})
-          }
+        try {
+          const req = await post('/student/formulary', obj)
+          setSnackbarStatus({
+            open: true, 
+            message: "Resposta submetida com sucesso."
+          })
+          push(`${path}`)
+        } catch (error) {
+          setSnackbarStatus({ 
+            open: true, 
+            message: "Ocorreu um erro no envio, tente mais tarde."
+          })
+        }
       }
   }
 
@@ -98,17 +113,15 @@ export default function AnswerForm() {
     <div style={{padding: '2rem', width:'100vw'}}>
       <ReactFormGenerator
         download_path=""
-        // back_action="/"
-        // back_name="Voltar"
         answer_data={answers}
         action_name="Enviar Resposta"
         form_action="/"
         form_method="POST"
         read_only={false}
         onSubmit={(data)=> sendAnswers(data)}
-        // variables={variables}
         hide_actions={false}
-        data={JSON.parse(json_format)} />
+        data={JSON.parse(json_format)} 
+      />
     </div>)
   }
 
@@ -120,21 +133,21 @@ export default function AnswerForm() {
             alignItems="center"
         >
             <Grid item xs={4} md={4} lg={6}>
-                <Autocomplete
-                  {...defaultDisciplineProps}
-                  classes={{paper: classes.paper}}
-                  id="Disciplinas"
-                  debug
-                  onChange={(e, val)=> setDiscipline(val)}
-                  renderInput={(params) => (
-                  <TextField 
-                    variant={'outlined'} 
-                    {...params} 
-                    size={'medium'} 
-                    label="Disciplinas" 
-                    margin="normal" />
-                  )}
-                />
+              <Autocomplete
+                {...defaultDisciplineProps}
+                classes={{paper: classes.paper}}
+                id="Disciplina"
+                debug
+                onChange={(e, val)=> setDiscipline(val)}
+                renderInput={(params) => (
+                <TextField 
+                  variant={'outlined'} 
+                  {...params} 
+                  size={'medium'} 
+                  label="Disciplina" 
+                  margin="normal" />
+                )}
+              />
             </Grid> 
             <Grid item xs={3} md={3} lg={6}>
                 <Autocomplete
@@ -153,7 +166,7 @@ export default function AnswerForm() {
                    margin="normal" />
                  )}
                 />
-            </Grid>         
+            </Grid>     
         </Grid>
 
         <Grid container spacing={3} direction="row"
@@ -161,7 +174,8 @@ export default function AnswerForm() {
             alignItems="top"
         >
             {form && <RenderForm {...form} />} 
-        </Grid>
+        </Grid>   
+        { snackbar }
       </Container>
     </Main>
   )

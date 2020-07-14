@@ -9,23 +9,6 @@ const formStore = new Store({
       context.commit('setData', payloadData);
       if (isSaveData) this.save(context, payloadData);
     },
-    // load(context, { loadUrl, saveUrl, data }) {
-    //   _saveUrl = saveUrl;
-    //   if (_onLoad) {
-    //     _onLoad().then(x => this.setData(context, x));
-    //   } else if (loadUrl) {
-    //     get(loadUrl).then(x => {
-    //       //console.log(x)
-    //       if (data && data.length > 0 && x.length === 0) {
-    //         data.forEach(y => x.push(y));
-    //       }
-    //       this.setData(context, x);
-    //     });
-    //   } else {
-    //     this.setData(context, data);
-    //   }
-    // },
-
     async load(context, { id, loadUrl, data }) {
       if (id) {
         try {

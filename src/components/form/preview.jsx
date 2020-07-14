@@ -9,6 +9,8 @@ import FormElementsEdit from './form-elements-edit';
 import ReactFormGenerator from './form';
 import SortableFormElements from './sortable-form-elements';
 import Button from '@material-ui/core/Button';
+import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 const { PlaceHolder } = SortableFormElements;
 const answers = {}
@@ -24,6 +26,7 @@ export default class Preview extends React.Component {
     this.state = {
       data: [],
       answer_data: {},
+      isLoading: false
     };
     this.seq = 0;
 
@@ -40,10 +43,12 @@ export default class Preview extends React.Component {
     // }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { data, url, saveUrl, id, formId } = this.props;
-    store.dispatch('load', { id: formId , loadUrl: url, saveUrl, data: data || [] });
+    this.setState({isLoading: true})
+    await store.dispatch('load', { id: formId , loadUrl: url, saveUrl, data: data || [] });
     document.addEventListener('mousedown', this.editModeOff);
+    this.setState({isLoading: false})
   }
 
   componentWillUnmount() {
@@ -188,7 +193,7 @@ export default class Preview extends React.Component {
     const items = Array.isArray(data) && data.map((item, index) => this.getElement(item, index));
     return (
       <>
-      { published_at.length > 0 ?
+      { published_at && published_at.length > 0 ?
         this.renderNoEdit(published_at)
       :
       <div style={{marginLeft: '3rem'}} className={classes}>
@@ -205,17 +210,21 @@ export default class Preview extends React.Component {
           }
         </div>
         <div className="Sortable">{items}</div>
-        <PlaceHolder 
-          id="form-place-holder" 
-          show={items.length === 0} 
-          index={items.length} 
-          moveCard={this.cardPlaceHolder} 
-          insertCard={this.insertCard}
-        />
+          { this.state.isLoading ? 
+              <Skeleton /> :
+              <PlaceHolder 
+              id="form-place-holder" 
+              show={items.length === 0} 
+              index={items.length} 
+              moveCard={this.cardPlaceHolder} 
+              insertCard={this.insertCard}
+              />
+          }
         <div>
-          <Button size="large" variant="outlined" color="primary" className="pull-right" 
+          <Button size="large" variant="contained" color="primary" className="pull-right" 
             style={{ marginRight: '10px' }}
             onClick={() => formId && store.dispatch('saveForm', { json_format: data, id: formId })}
+            startIcon={<SaveOutlinedIcon />}
           >
           Salvar
           </Button>

@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import MaterialTable, { MTableToolbar } from 'material-table';
 import Button from '@material-ui/core/Button';
+import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
 import Chip from '@material-ui/core/Chip';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
-import { tableIcons } from '../../../config/table-config'
+import { tableIcons, localizationClasses } from '../../../config/table-config'
 import { convertObjId } from '../../utils/convert'
 import { axiosInstance as axios } from '../../../config/axios'
 const { get, post } = axios
@@ -18,12 +19,20 @@ export default function RenderTable(props) {
   const [professorsList, setProfessorsList] = useState([])
   const [classList, setClassList] = useState([])
   const [newClassList, setNewClassList] = useState([])
-  const { curriculum, period } = props
+  const { curriculum, period, setSnackbarStatus } = props
 
   useEffect(() => {
     const fetchProfs = async () => {
-      const reqProfs = await get(`/coord/professors`)
-      setProfessorsList(reqProfs.data)
+      try {
+        const reqProfs = await get(`/coord/professors`)
+        setProfessorsList(reqProfs.data)
+        
+      } catch (error) {
+        setSnackbarStatus({ 
+          open: true, 
+          message: "Ocorreu um erro no carregamento."
+        })
+      }
     }
     fetchProfs()
   },[])
@@ -37,6 +46,10 @@ export default function RenderTable(props) {
         setDisciplineList(reqDisciplines.data)
       } catch (error) {
         setIsError(true);
+        setSnackbarStatus({ 
+          open: true, 
+          message: "Ocorreu um erro no carregamento das disciplinas."
+        })
       }
       setIsLoading(false);
     }
@@ -58,6 +71,10 @@ export default function RenderTable(props) {
         setClassList(reqClasses.data)
       } catch (error) {
         setIsError(true);
+        setSnackbarStatus({ 
+          open: true, 
+          message: "Ocorreu um erro no carregamento das turmas."
+        })
       }
       setIsLoading(false);
     }
@@ -65,7 +82,29 @@ export default function RenderTable(props) {
     disciplineList.length > 0 && period && fetchClasses()
   },[disciplineList, period])
 
-  const columnDefinition = [
+  const handleSave = async (newClasses, period) => {
+    const disc_array = convertObjId(disciplineList)
+    const obj = {
+      period_id: period.id,
+      classes: newClasses,
+      disc_array
+    }
+    if(newClasses.length > 0) {
+      try {
+        const reqClasses = await post(`/coord/classes`, obj)
+        setSnackbarStatus({ 
+          open: true, 
+          message: "Turmas salvas com sucesso."
+        })     
+      } catch (error) {
+        setSnackbarStatus({ 
+          open: true, 
+          message: "Ocorreu um erro no salvamento. Tente novamente mais tarde."
+        })
+      }
+    }
+  }
+  const columnClasses = [
     { 
       title: 'Professores', 
       field: 'id', 
@@ -75,7 +114,7 @@ export default function RenderTable(props) {
           classes={classList}
           newClassList={newClassList}
           setNewClassList={setNewClassList} 
-          profsList={professorsList} 
+          profsList={period && professorsList} 
           rowData={rowData}
         /> 
     },
@@ -87,60 +126,31 @@ export default function RenderTable(props) {
       title: 'Sigla', 
       field: 'slug' 
     }
-  ]
-
-  const handleSave = async (newClasses, period) => {
-    const disc_array = convertObjId(disciplineList)
-    const obj = {
-      period_id: period.id,
-      classes: newClasses,
-      disc_array
-    }
-    if(newClasses.length > 0) {
-      const reqClasses = await post(`/coord/classes`, obj)
-      console.log(reqClasses.data)
-    } 
-  }
+  ];
 
   return (
     <>
-    <div style={{width: '100%', display: 'flex', justifyContent: 'flex-end', padding: '1.2rem'}}>
-      <Button onClick={() => handleSave(newClassList, period)} variant="outlined" color="primary">
-        Salvar
-      </Button>
-    </div>
-    <MaterialTable
-      title="Professores das Turmas"
-      style={{width: '100%'}}
-      columns={columnDefinition}
-      data={disciplineList}
-      icons={tableIcons}
-      options={{
-        showTitle: true, 
-      }}
-      localization={{
-        header: {actions: 'Ações'},
-        body: {emptyDataSourceMessage: "Nenhuma turma."},
-        pagination: {
-          searchTooltip: "Buscar",
-          searchPlaceholder: "Buscar",
-          labelRowsSelect: "Linhas",
-          labelRowsPerPage: "Linhas por página",
-          firstAriaLabel: "Primeira Página",
-          firstTooltip: "Primeira Página",
-          previousAriaLabel: "Página Anterior",
-          previousTooltip: "Página Anterior",
-          nextAriaLabel: "Próxima Página",
-          nextTooltip: "Próxima Página",
-          lastAriaLabel: "Última Página",
-          lastTooltip: "Última Página",
-        },
-        toolbar: {
-          searchTooltip: "Buscar",
-          searchPlaceholder: "Buscar",
-        }
-      }}
-    />
+      <div style={{width: '100%', display: 'flex', justifyContent: 'flex-end', padding: '1.2rem'}}>
+        <Button 
+          onClick={() => handleSave(newClassList, period)} 
+          variant="contained" 
+          color="primary"
+          startIcon={<SaveOutlinedIcon />}
+        >
+          Salvar
+        </Button>
+      </div>
+      <MaterialTable
+        title="Professores das Turmas"
+        style={{width: '100%'}}
+        columns={columnClasses}
+        data={disciplineList}
+        icons={tableIcons}
+        options={{
+          showTitle: true, 
+        }}
+        localization={localizationClasses}
+      />
     </>
   )
 }
@@ -164,9 +174,7 @@ function FixedTags({
       professor_id: c.professor_id
     }
   })
-  // const fixedOptions = filteredClasses ? filteredClasses : [] 
-  // const [value, setValue] = useState([...fixedOptions]);
-  // if(filteredClasses) setValue([...filteredClasses])
+
   useEffect(() => {
     if(filteredClasses && curriculum && period) {
       setValue([...filteredClasses])
