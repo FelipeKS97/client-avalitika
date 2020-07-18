@@ -36,8 +36,9 @@ export default function ClassesContainer() {
           open: true, 
           message: "Ocorreu um erro no carregamento."
         })
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     }
     fetchData()
   },[])
@@ -64,6 +65,7 @@ export default function ClassesContainer() {
                   classes={{paper: classes.paper}}
                   id="Grade Curricular"
                   debug
+                  noOptionsText={"Vazio"}
                   onChange={(e, val)=> setCurriculum(val)}
                   renderInput={(params) => (
                   <TextField variant={'outlined'} {...params} size={'medium'} label="Grade Curricular" margin="normal" />
@@ -77,6 +79,7 @@ export default function ClassesContainer() {
                   id="Período"
                   defaultValue={'2020.1'}
                   debug
+                  noOptionsText={"Vazio"}
                   onChange={(e, val)=> setPeriod(val)}
                   renderInput={(params) => (
                   <TextField variant={'outlined'} {...params} size={'medium'} label="Período" margin="normal" />

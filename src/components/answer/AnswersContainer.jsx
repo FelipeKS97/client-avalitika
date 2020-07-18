@@ -1,17 +1,22 @@
-import React, {useEffect, useState} from 'react';
-import MaterialTable, { MTableToolbar } from 'material-table';
+import React, { useEffect, useState } from 'react';
+import MaterialTable from 'material-table';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { useParams, useHistory } from "react-router-dom";
 
-import useCustomSnackbar from '../../hooks/CustomSnackbar'
-import { tableIcons } from '../../../config/table-config'
-import { axiosInstance as axios } from '../../../config/axios'
-import { convertToColumns } from '../../utils/convert'
-import { useStyles } from './answerStyles'
-import { columnArray, localizationObj } from './mdTableConfig'
-import Main from '../main/main'
+import Main from '../main/main';
+import useCustomSnackbar from '../../hooks/CustomSnackbar';
+import { 
+  tableIcons, 
+  columnArrayAnswers, 
+  localizationAnswers 
+} from '../../../config/table-config';
+import { axiosInstance as axios } from '../../../config/axios';
+import { convertToColumns } from '../../utils/convert';
+import { formatArrayDates } from '../../utils/formatDates';
+import { useStyles } from './answerStyles';
+
 
 export default function AnswersContainer() {
   const classes = useStyles();
@@ -22,14 +27,14 @@ export default function AnswersContainer() {
   const { id } = useParams()
   const { push } = useHistory()
   const { get } = axios
-
+  
   useEffect(() => {
     const fetchData = async () => {
       setIsError(false);
       setIsLoading(true);
       try {
         const reqAnswers = await get(`/coord/formulary/${id}/answers`)
-        let answerColumns = convertToColumns(reqAnswers.data.data)
+        let answerColumns = convertToColumns(reqAnswers.data)
         setAnswersList(answerColumns)    
       } catch (error) {
         setIsError(true);
@@ -37,12 +42,14 @@ export default function AnswersContainer() {
           open: true, 
           message: "Ocorreu um erro no carregamento."
         })
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     }
     id && fetchData()
   },[id])
 
+  const haveContent = answersList.length > 0 
 
   return (
     <Main title={'Respostas'}>
@@ -50,16 +57,15 @@ export default function AnswersContainer() {
         <Grid container spacing={3} direction="row"
           justify="left"
           alignItems="center">
-          {/* <IconTabs /> */}
           
           <MaterialTable
             title="Últimas respostas"
             style={{width: '100%'}}
-            columns={columnArray}
-            data={answersList}
+            columns={columnArrayAnswers}
+            data={haveContent ? formatArrayDates(answersList) : []}
             icons={tableIcons}
             options={{ actionsColumnIndex: 4 }}
-            localization={localizationObj}
+            localization={localizationAnswers}
             actions={[
               {
                 icon: ()=> <VisibilityIcon />,

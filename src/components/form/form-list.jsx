@@ -13,9 +13,10 @@ import PaginationContainer from '../pagination/pagination'
 export default function FormListContainer() {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [snackbar, setSnackbarStatus] = useCustomSnackbar()
   const [isUpdate, setIsUpdate] = useState(false);
+  const [snackbar, setSnackbarStatus] = useCustomSnackbar()
   const [formList, setFormList] = useState([])
+  const [courseId, setCourse] = useState()
   const classes = useStyles();
   const { get } = axios
 
@@ -24,21 +25,20 @@ export default function FormListContainer() {
       setIsError(false);
       setIsLoading(true);
       try {
+        const reqInfo = await get('/coord/info')
+        setCourse(reqInfo.data[1].course_id)  
         const reqForms = await get('/coord/formulary')
-        //   params: {
-        //     curriculum_id: discipline.id,
-        //     period_id: 1
-        //   }
-        // })
-        setFormList(reqForms.data.data)   
+        setFormList(reqForms.data)  
       } catch (error) {
         setIsError(true);
         setSnackbarStatus({ 
           open: true, 
-          message: "Ocorreu um erro no carregamento."
+          message: "Ocorreu um erro no carregamento.",
+          // action: setIsUpdate
         })
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     }
     fetchData()
 
@@ -48,26 +48,35 @@ export default function FormListContainer() {
     }
   },[])
 
+  const filteredForms = formList.filter(form => form.curriculum.course_id === courseId)
+  const haveContent = filteredForms.length > 0
+
   return (
     <Main title={'Semestre Atual: 2020.1'}>
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3} direction="row"
             justify="left"
             alignItems="top"
-        >{formList.length > 0 ?
-            formList.map((el, i) => (
+        >{haveContent ?
+            filteredForms.map((el, i) => (
               <Grid key={i} item xs={12} md={4} lg={3}>
                 <FormCard 
                   setSnackbarStatus={setSnackbarStatus} 
-                  isError={isError} 
+                  isError={isError}
+                  isLoading={isLoading}
+                  haveContent={haveContent}
                   {...el}
                 />
               </Grid>
             ))
             :
-            <> {Array.from({ length: 8 }, (x, i) => (
+            <> {!isError && Array.from({ length: 8 }, (x, i) => (
                 <Grid key={i} item xs={12} md={4} lg={3}>
-                  <FormCard isError={isError} isLoading={isLoading}/>
+                  <FormCard 
+                    isError={isError} 
+                    isLoading={isLoading}
+                    haveContent={haveContent}
+                  />
                 </Grid>
               ))}
             </>

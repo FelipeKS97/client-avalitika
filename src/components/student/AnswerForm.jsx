@@ -12,6 +12,7 @@ import { useStyles } from './studentStyles'
 import Main from '../main/main'
 import FormCard from '../form/form-card'
 import { axiosInstance as axios } from '../../../config/axios'
+import { set } from 'date-fns';
 
 
 export default function AnswerForm() {
@@ -20,15 +21,15 @@ export default function AnswerForm() {
   const [form, setForm] = useState()
   const [answers, setAnswers] = useState({})
   const [period, setPeriod] = useState()
-  const [discipline, setDiscipline] = useState()
+  const [discipline, setDiscipline] = useState(null)
   const [disciplineList, setDisciplineList] = useState([])
-  const [professor, setProfessor] = useState()
+  const [professor, setProfessor] = useState(null)
   const [professorList, setProfessorList] = useState([])
   const [snackbar, setSnackbarStatus] = useCustomSnackbar() 
   const classes = useStyles();
   const { id } = useParams()
   const { push } = useHistory()
-  const { path } = useRouteMatch()
+  const { url } = useRouteMatch()
   const { get, post } = axios
 
   useEffect(() => {
@@ -39,7 +40,7 @@ export default function AnswerForm() {
         const reqForm = await get(`/student/formulary/${id}`)
         setForm(reqForm.data)
         const reqDisciplines = await get(`/student/disciplines?curriculum_id=${reqForm.data.curriculum_id}`)
-        setDisciplineList(reqDisciplines.data.data)
+        setDisciplineList(reqDisciplines.data)
       } catch (error) {
         setSnackbarStatus({ 
           open: true, 
@@ -61,12 +62,14 @@ export default function AnswerForm() {
               period_id: period.id
             }
         })
-        setProfessorList(req.data.data)
+        setProfessorList(req.data)
       } catch (error) {
         setIsError(true);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     }
+    setProfessor(null)
     discipline && period && fetchData()
   },[discipline])
 
@@ -97,7 +100,7 @@ export default function AnswerForm() {
             open: true, 
             message: "Resposta submetida com sucesso."
           })
-          push(`${path}`)
+          push(`${url}`)
         } catch (error) {
           setSnackbarStatus({ 
             open: true, 
@@ -108,16 +111,24 @@ export default function AnswerForm() {
   }
 
 
-  function RenderForm({ json_format }) {
+  function RenderForm({ json_format, discipline, professor }) {
+    let isSelected = !(discipline && professor)
+
+    const handleWarning = () => {
+      isSelected && setSnackbarStatus({ 
+        open: true, 
+        message: "Por favor, selecione a disciplina e o professor."
+      })
+    }
     return (
-    <div style={{padding: '2rem', width:'100vw'}}>
+    <div onClick={handleWarning} style={{padding: '2rem', width:'100vw'}}>
       <ReactFormGenerator
         download_path=""
         answer_data={answers}
         action_name="Enviar Resposta"
         form_action="/"
         form_method="POST"
-        read_only={false}
+        read_only={isSelected}
         onSubmit={(data)=> sendAnswers(data)}
         hide_actions={false}
         data={JSON.parse(json_format)} 
@@ -129,51 +140,61 @@ export default function AnswerForm() {
     <Main title={form && form.title}>
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3} direction="row"
-            justify="left"
-            alignItems="center"
+          justify="left"
+          alignItems="center"
         >
-            <Grid item xs={4} md={4} lg={6}>
-              <Autocomplete
-                {...defaultDisciplineProps}
-                classes={{paper: classes.paper}}
-                id="Disciplina"
-                debug
-                onChange={(e, val)=> setDiscipline(val)}
-                renderInput={(params) => (
-                <TextField 
-                  variant={'outlined'} 
-                  {...params} 
-                  size={'medium'} 
-                  label="Disciplina" 
-                  margin="normal" />
-                )}
+          <Grid item xs={4} md={4} lg={6}>
+            <Autocomplete
+              {...defaultDisciplineProps}
+              classes={{paper: classes.paper}}
+              id="Disciplina"
+              debug
+              noOptionsText={"Vazio"}
+              onChange={(e, val)=> setDiscipline(val)}
+              renderInput={(params) => (
+              <TextField 
+                variant={'outlined'} 
+                {...params} 
+                size={'medium'} 
+                label="Disciplina" 
+                margin="normal" />
+              )}
+            />
+          </Grid> 
+          <Grid item xs={3} md={3} lg={6}>
+            <Autocomplete
+              {...defaultProfsProps}
+              value={professor}
+              classes={{paper: classes.paper}}
+              id="Professor"
+              debug
+              noOptionsText={"Vazio"}
+            //  disabled={curriculumList && true}
+              onChange={(e, val)=> setProfessor(val)}
+              renderInput={(params) => (
+              <TextField 
+                variant={'outlined'} 
+                {...params} 
+                size={'medium'} 
+                label="Professor" 
+                margin="normal"
+                value={professor}
               />
-            </Grid> 
-            <Grid item xs={3} md={3} lg={6}>
-                <Autocomplete
-                 {...defaultProfsProps}
-                 classes={{paper: classes.paper}}
-                 id="Professor"
-                 debug
-                //  disabled={curriculumList && true}
-                 onChange={(e, val)=> setProfessor(val)}
-                 renderInput={(params) => (
-                 <TextField 
-                   variant={'outlined'} 
-                   {...params} 
-                   size={'medium'} 
-                   label="Professor" 
-                   margin="normal" />
-                 )}
-                />
-            </Grid>     
+              )}
+            />
+          </Grid>     
         </Grid>
 
         <Grid container spacing={3} direction="row"
             justify="left"
             alignItems="top"
         >
-            {form && <RenderForm {...form} />} 
+          {form && 
+            <RenderForm 
+              discipline={discipline} 
+              professor={professor} 
+              {...form} 
+            />} 
         </Grid>   
         { snackbar }
       </Container>

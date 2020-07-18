@@ -121,7 +121,7 @@ export default class ReactForm extends React.Component {
           }
         });
         if (checked_options < 1) {
-          // errors.push(item.label + ' is required!');
+          // errors.push(item.label + ' é obrigatório.');
           invalid = true;
         }
       } else {
@@ -220,11 +220,11 @@ export default class ReactForm extends React.Component {
       }
 
       if (this._isInvalid(item)) {
-        errors.push(`${item.label} is required!`);
+        errors.push(`${item.label} é obrigatório.`);
       }
 
       if (this.props.validateForCorrectness && this._isIncorrect(item)) {
-        errors.push(`${item.label} was answered incorrectly!`);
+        errors.push(`${item.label} foi respondido incorretamente.`);
       }
     });
 

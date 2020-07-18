@@ -32,8 +32,9 @@ export default function MainContainer({ history }) {
             setPeriod(result.data[0].description)
         } catch (error) {
             setIsError(true);
+        } finally {
+            setIsLoading(false);
         }
-        setIsLoading(false);
     }
     fetchData()
   },[])

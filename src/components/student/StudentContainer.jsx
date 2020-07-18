@@ -29,7 +29,7 @@ export default function FormListContainer() {
       setIsLoading(true);
       try {
         const reqCourses = await get(`/student/courses`)
-        setCourseList(reqCourses.data.data)
+        setCourseList(reqCourses.data)
       } catch (error) {
         setIsError(true);
         setSnackbarStatus({ 
@@ -37,7 +37,9 @@ export default function FormListContainer() {
           message: "Ocorreu um erro no carregamento."
         })
       } 
-      setIsLoading(true);
+      finally {
+        setIsLoading(false);
+      }
     }
     fetchCourses()
   },[])
@@ -48,15 +50,16 @@ export default function FormListContainer() {
       setIsLoading(true);
       try {
         const reqCurricula = await get(`/student/curricula?course_id=${course.id}`)
-        setCurriculumList(reqCurricula.data.data)
+        setCurriculumList(reqCurricula.data)
       } catch (error) {
         setIsError(true);
         setSnackbarStatus({ 
           open: true, 
           message: "Ocorreu um erro no carregamento."
         })
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(true);
     }
     course && fetchCurricula()
   },[course])
@@ -67,21 +70,21 @@ export default function FormListContainer() {
       setIsLoading(true);
       try {
         const reqForms = await get(`/student/formularies?curriculum_id=${curriculum.id}`)
-        setFormList(reqForms.data.data)   
+        setFormList(reqForms.data)   
       } catch (error) {
         setIsError(true);
         setSnackbarStatus({ 
           open: true, 
           message: "Ocorreu um erro no carregamento."
         })
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     }
     curriculum && fetchData()
   },[curriculum])
 
   const defaultCurriculumProps = {
-    //options: curricula,
     options: curriculumList,
     getOptionLabel: (option) => option.name,
   };
@@ -89,6 +92,8 @@ export default function FormListContainer() {
     options: courseList,
     getOptionLabel: (option) => option.name,
   };
+
+  const haveContent = formList.length > 0
 
   return (
     <Main title={'Formulários Disponíveis'}>
@@ -100,11 +105,12 @@ export default function FormListContainer() {
           <Grid item xs={4} md={4} lg={6}>
               <Autocomplete
                 {...defaultCourseProps}
-
                 classes={{paper: classes.paper}}
                 id="Curso"
                 debug
+                noOptionsText={"Vazio"}
                 onChange={(e, val)=> setCourse(val)}
+                noOptionsText={"Vazio"}
                 renderInput={(params) => (
                 <TextField 
                   variant={'outlined'} 
@@ -121,6 +127,7 @@ export default function FormListContainer() {
                 classes={{paper: classes.paper}}
                 id="Grade Curricular"
                 debug
+                noOptionsText={"Vazio"}
               //  disabled={curriculumList && true}
                 onChange={(e, val)=> setCurriculum(val)}
                 renderInput={(params) => (
@@ -138,10 +145,14 @@ export default function FormListContainer() {
         <Grid container spacing={3} direction="row"
           justify="left"
           alignItems="top"
-        >{formList.length > 0 &&
+        >{haveContent &&
             formList.map((el, i) => (
                 <Grid key={i} item xs={12} md={4} lg={3}>
-                  <FormCard isStudent={true} {...el}/>
+                  <FormCard 
+                    isStudent={true} 
+                    haveContent={haveContent} 
+                    {...el}
+                    />
                 </Grid>
             ))
             // :

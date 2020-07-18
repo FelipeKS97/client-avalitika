@@ -41,8 +41,9 @@ export default function AnswerContainer() {
           open: true, 
           message: "Ocorreu um erro no carregamento."
         })
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     }
     id && fetchData()
   },[id])

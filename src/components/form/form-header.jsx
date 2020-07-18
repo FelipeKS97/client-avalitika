@@ -13,11 +13,11 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import Fab from '@material-ui/core/Fab';
+import Tooltip from '@material-ui/core/Tooltip';
 import AddIcon from '@material-ui/icons/Add';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
+
+
+import useSelect from '../../hooks/CustomSelect'
 import { axiosInstance as axios } from '../../../config/axios'
 import { useRouteMatch, useHistory } from "react-router-dom";
 
@@ -63,8 +63,9 @@ export default function EditFormHeader({ isCreate, formData, setIsUpdate, setSna
         setCurriculumList(reqCurricula.data)    
       } catch (error) {
         setIsError(true);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     }
     fetchData()
   },[])
@@ -101,9 +102,10 @@ export default function EditFormHeader({ isCreate, formData, setIsUpdate, setSna
           open: true, 
           message: "Ocorreu um erro, tente mais tarde."
         })
+      } finally {
+        setIsLoading(false);
       }
     }
-    setIsLoading(false)
   }
 
   const handleEdit = async () => {
@@ -129,17 +131,26 @@ export default function EditFormHeader({ isCreate, formData, setIsUpdate, setSna
           message: "Ocorreu um erro, tente mais tarde."
         })
       }
+      finally {
+        setIsLoading(false);
+      }
     }
-    setIsLoading(false)
   }
 
 
   return (
     <div>
       { isCreate ?
-        <Fab onClick={handleClickOpen} className={classes.fab} color="primary" aria-label="Novo Formulário">
-          <AddIcon />
-        </Fab>
+        <Tooltip title="Novo Formulário">
+          <Fab  
+            onClick={handleClickOpen} 
+            className={classes.fab} 
+            color="primary" 
+            aria-label="Novo Formulário"
+          >
+            <AddIcon />
+          </Fab>
+        </Tooltip>
         :
         <Button className="pull-right" style={{marginRight: '10px'}} variant="outlined" color="primary" onClick={handleClickOpen}>
           Editar Cabeçalho
@@ -151,7 +162,6 @@ export default function EditFormHeader({ isCreate, formData, setIsUpdate, setSna
             <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
               <CloseIcon />
             </IconButton>
-
             {
               isCreate ?
               <> 
@@ -198,25 +208,4 @@ export default function EditFormHeader({ isCreate, formData, setIsUpdate, setSna
       </Dialog>
     </div>
   );
-}
-
-function useSelect(options, label) {
-  const [value, setValue] = useState('');
-  const random = Math.random()
-  const select = (
-    <FormControl style={{width:'100%'}}>
-      <InputLabel id={label}>{label}</InputLabel>
-      <Select
-      labelId="simple-select-label"
-      id="simple-select-label"
-      value={value}
-      onChange={e => setValue(e.target.value)}
-      > { 
-        options && options.map((op, i) => 
-          <MenuItem key={i} value={op.id}>{ op.name || op.description }</MenuItem>
-        )
-        }
-      </Select>
-    </FormControl>)
-  return [value, select];
 }
