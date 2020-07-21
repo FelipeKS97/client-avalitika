@@ -397,7 +397,9 @@ class Dropdown extends React.Component {
           <select {...props}>
             {this.props.data.options.map((option) => {
               const this_key = `preview_${option.key}`;
-              return <option value={option.value} key={this_key}>{option.text}</option>;
+              const this_value = [option.key]
+              // return <option value={option.value} key={this_key}>{option.text}</option>;
+              return <option value={this_value} key={this_key}>{option.text}</option>;
             })}
           </select>
         </div>

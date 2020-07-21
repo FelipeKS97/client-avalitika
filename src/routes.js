@@ -18,6 +18,7 @@ import StudentContainer from './components/student/StudentContainer';
 import AnswerFormContainer from './components/student/AnswerForm';
 import AnswersContainer from './components/answer/AnswersContainer';
 import AnswerContainer from './components/answer/AnswerContainer';
+import ReportContainer from './components/report/ReportContainer';
 
 export default function RouteConfig() {
   
@@ -34,7 +35,10 @@ export default function RouteConfig() {
           <Route path='/student-form/:id' component={AnswerFormContainer} />
           <Route exact path='/student-form' component={StudentContainer} />
         </Switch>
-        <Route path='/answers/:id' component={AnswersContainer} />
+        <Switch>
+          <Route path='/answers/:id/report' component={ReportContainer} />
+          <Route path='/answers/:id' component={AnswersContainer} />
+        </Switch>
         <Route path='/answer/:id' component={AnswerContainer} />
         {/* <Route exact path="*" component={NoMatch} /> */}
         {/* <Redirect from="*" to="/forms" /> */}

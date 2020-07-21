@@ -22,7 +22,7 @@ export default class DynamicOptionList extends React.Component {
   editOption(option_index, e) {
     const this_element = this.state.element;
     const val = (this_element.options[option_index].value !== this._setValue(this_element.options[option_index].text)) ? this_element.options[option_index].value : this._setValue(e.target.value);
-
+    console.log({val})
     this_element.options[option_index].text = e.target.value;
     this_element.options[option_index].value = val;
     this.setState({
@@ -84,8 +84,8 @@ export default class DynamicOptionList extends React.Component {
           <li>
             <div className="row">
               <div className="col-sm-6"><b>Opções</b></div>
-              { this.props.canHaveOptionValue &&
-              <div className="col-sm-2"><b>Valor</b></div> }
+              {/* { this.props.canHaveOptionValue &&
+              <div className="col-sm-2"><b>Valor</b></div> } */}
               {/* { this.props.canHaveOptionValue && this.props.canHaveOptionCorrect &&
               <div className="col-sm-4"><b>Correct</b></div> } */}
             </div>
@@ -100,10 +100,10 @@ export default class DynamicOptionList extends React.Component {
                     <div className="col-sm-6">
                       <input tabIndex={index + 1} className="form-control" style={{ width: '100%' }} type="text" name={`text_${index}`} placeholder="Texto da opção" value={option.text} onBlur={this.updateOption.bind(this)} onChange={this.editOption.bind(this, index)} />
                     </div>
-                    { this.props.canHaveOptionValue &&
+                    {/* { this.props.canHaveOptionValue &&
                     <div className="col-sm-2">
                       <input className="form-control" type="text" name={`value_${index}`} value={val} onChange={this.editValue.bind(this, index)} />
-                    </div> }
+                    </div> } */}
                     {/* { this.props.canHaveOptionValue && this.props.canHaveOptionCorrect &&
                     <div className="col-sm-1">
                       <input className="form-control" type="checkbox" value="1" onChange={this.editOptionCorrect.bind(this, index)} checked={option.hasOwnProperty('correct')} />

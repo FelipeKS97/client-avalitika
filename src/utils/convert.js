@@ -15,3 +15,6 @@ export const convertToColumns = (data) => {
   });
 };
 
+export const removeStringTags = (string) => {
+  return string.replace(/<[^>]*>/g, '')
+};

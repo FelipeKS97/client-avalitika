@@ -7,38 +7,40 @@ import useCustomSnackbar from '../../hooks/CustomSnackbar'
 import { useParams } from "react-router-dom";
 import { useHistory, useRouteMatch } from "react-router-dom";
 
-import ReactFormGenerator from '../form/form';
-import { useStyles } from './studentStyles';
-import Main from '../main/main';
-import { axiosInstance as axios } from '../../../config/axios';
+import { useStyles } from './reportStyles'
+import Main from '../main/main'
+import ReportItem from './ReportItem'
+import { axiosInstance as axios } from '../../../config/axios'
 
 
 export default function AnswerForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [form, setForm] = useState()
-  const [answers, setAnswers] = useState({})
   const [period, setPeriod] = useState()
   const [discipline, setDiscipline] = useState(null)
   const [disciplineList, setDisciplineList] = useState([])
   const [professor, setProfessor] = useState(null)
   const [professorList, setProfessorList] = useState([])
+  const [answers, setAnswers] = useState([])
   const [snackbar, setSnackbarStatus] = useCustomSnackbar() 
   const classes = useStyles();
   const { id } = useParams()
   const { push } = useHistory()
   const { url } = useRouteMatch()
-  const { get, post } = axios
+  const { get } = axios
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const reqInfo = await get('/coord/info')
         setPeriod(reqInfo.data[0])
-        const reqForm = await get(`/student/formulary/${id}`)
+        const reqForm = await get(`/coord/formulary/${id}`)
         setForm(reqForm.data)
-        const reqDisciplines = await get(`/student/disciplines?curriculum_id=${reqForm.data.curriculum_id}`)
+        const reqDisciplines = await get(`/student/disciplines?curriculum_id=${reqForm.data.curriculum.id}`)
         setDisciplineList(reqDisciplines.data)
+        const reqAnswers = await get(`/coord/formulary/${id}/answers`)
+        setAnswers(reqAnswers.data)
       } catch (error) {
         setSnackbarStatus({ 
           open: true, 
@@ -80,68 +82,14 @@ export default function AnswerForm() {
     getOptionLabel: (option) => option.prof_name,
   };
 
-  async function sendAnswers(json_answer) {
-      if(discipline && period && professor) {
-        let randomNumber = Math.floor((Math.random() * 99809875) + 1);
-        let obj = {
-            discipline_id: discipline.id,
-            professor_id: professor.professor_id,
-            period_id: period.id,
-            verification_id: `${randomNumber}`,
-            formulary_id: parseInt(id),
-            json_answer
-        }
-
-        try {
-          const req = await post('/student/formulary', obj)
-          setSnackbarStatus({
-            open: true, 
-            message: "Resposta submetida com sucesso."
-          })
-          push(`${url}`)
-        } catch (error) {
-          setSnackbarStatus({ 
-            open: true, 
-            message: "Ocorreu um erro no envio, tente mais tarde."
-          })
-        }
-      }
-  }
-
-
-  function RenderForm({ json_format, discipline, professor }) {
-    let isSelected = !(discipline && professor)
-
-    const handleWarning = () => {
-      isSelected && setSnackbarStatus({ 
-        open: true, 
-        message: "Por favor, selecione a disciplina e o professor."
-      })
-    }
-    return (
-    <div onClick={handleWarning} style={{padding: '2rem', width:'100vw'}}>
-      <ReactFormGenerator
-        download_path=""
-        answer_data={answers}
-        action_name="Enviar Resposta"
-        form_action="/"
-        form_method="POST"
-        read_only={isSelected}
-        onSubmit={(data)=> sendAnswers(data)}
-        hide_actions={false}
-        data={JSON.parse(json_format)} 
-      />
-    </div>)
-  }
-
   return (
-    <Main title={form && form.title}>
+    <Main title={'Relatório'}>
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3} direction="row"
           justify="left"
           alignItems="center"
         >
-          <Grid item xs={4} md={4} lg={6}>
+          <Grid item xs={6} md={6} lg={6}>
             <Autocomplete
               {...defaultDisciplineProps}
               classes={{paper: classes.paper}}
@@ -159,7 +107,7 @@ export default function AnswerForm() {
               )}
             />
           </Grid> 
-          <Grid item xs={3} md={3} lg={6}>
+          <Grid item xs={6} md={6} lg={6}>
             <Autocomplete
               {...defaultProfsProps}
               value={professor}
@@ -178,7 +126,7 @@ export default function AnswerForm() {
                 margin="normal"
                 value={professor}
               />
-              )}
+              )} 
             />
           </Grid>     
         </Grid>
@@ -187,12 +135,7 @@ export default function AnswerForm() {
             justify="left"
             alignItems="top"
         >
-          {form && 
-            <RenderForm 
-              discipline={discipline} 
-              professor={professor} 
-              {...form} 
-            />} 
+          {ReportItem({form, answers, discipline, professor})}
         </Grid>   
         { snackbar }
       </Container>

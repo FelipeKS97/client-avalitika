@@ -101,13 +101,6 @@ export const useStyles = makeStyles((theme) => ({
     },
     modalIndex: {
       zIndex: theme.zIndex.drawer + 2,
-    },
-    actionContainer: {
-      display: 'flex',
-      flexDirection: 'row-reverse',
-      width: '100%',
-      height: '40px',
-      margin: '1vh 0vh'
     }
 }));
   

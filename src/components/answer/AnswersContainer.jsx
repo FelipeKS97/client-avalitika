@@ -3,7 +3,9 @@ import MaterialTable from 'material-table';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import { useParams, useHistory } from "react-router-dom";
+import Button from '@material-ui/core/Button';
+import BarChartIcon from '@material-ui/icons/BarChart';
+import { useParams, useHistory, useRouteMatch } from "react-router-dom";
 
 import Main from '../main/main';
 import useCustomSnackbar from '../../hooks/CustomSnackbar';
@@ -25,6 +27,7 @@ export default function AnswersContainer() {
   const [isError, setIsError] = useState(false);
   const [snackbar, setSnackbarStatus] = useCustomSnackbar() 
   const { id } = useParams()
+  const { url } = useRouteMatch()
   const { push } = useHistory()
   const { get } = axios
   
@@ -51,13 +54,27 @@ export default function AnswersContainer() {
 
   const haveContent = answersList.length > 0 
 
+  console.log({url})
+
   return (
     <Main title={'Respostas'}>
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3} direction="row"
           justify="left"
-          alignItems="center">
-          
+          alignItems="center"
+        >
+          <div className={classes.actionContainer}>
+            <Button 
+              color="primary" 
+              variant="outlined" 
+              onClick={() => push(`${url}/report`)} 
+              size="small"
+              startIcon={<BarChartIcon />}
+            >
+              Relatório
+            </Button>
+          </div>
+
           <MaterialTable
             title="Últimas respostas"
             style={{width: '100%'}}
