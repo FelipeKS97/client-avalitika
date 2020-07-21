@@ -36,7 +36,7 @@ export default function ReportComments({ data }) {
                 <TimelineOppositeContent style={{ display: "none" }} />
                 <TimelineSeparator>
                   <TimelineDot />
-                  <TimelineConnector />
+                  {/* <TimelineConnector /> */}
                 </TimelineSeparator>
                 <TimelineContent>
                   <Paper elevation={3} className={classes.paper}>

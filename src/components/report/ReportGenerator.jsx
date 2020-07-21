@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import CustomBarChart from "../dashboard/CustomBarChart";
+import CustomPieChart from "../dashboard/CustomPieChart";
 import ReportComments from "./ReportComments";
 
 export default function ReportGenerator({
   answers,
+  chart,
   item,
   professor,
   discipline,
+  setTotalAnswers
 }) {
   let results = [];
   let data = [];
@@ -33,7 +36,7 @@ export default function ReportGenerator({
             return op.key === answer.res.value;
           }
         }).length;
-        return { total: sum, name: op.text };
+        return { respostas: sum, name: op.text };
       });
     } else {
       data = results.map((answer) => {
@@ -43,6 +46,20 @@ export default function ReportGenerator({
   }
   
   discipline && professor && generateData()
+  
+  function RenderCharts(type, data) {
+    switch (type) {
+      case 'bar':
+        return (<CustomBarChart setTotalAnswers={setTotalAnswers} data={data} />);
+        break;
+      case 'circle':
+        return (<CustomPieChart data={data} />);
+        break;
+      default:
+        return (<CustomBarChart data={data} />);
+        break;
+    }
+  }
 
   return (
     <>
@@ -50,7 +67,7 @@ export default function ReportGenerator({
         <div
           style={{ display: "flex", justifyContent: "center", width: "85%" }}
         >
-          <CustomBarChart data={data} />
+          {RenderCharts(chart.type, data)}
         </div>
       ) : (
         <div>
