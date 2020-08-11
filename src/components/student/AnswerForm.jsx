@@ -9,7 +9,7 @@ import { useHistory, useRouteMatch } from "react-router-dom";
 
 import ReactFormGenerator from '../form/form';
 import { useStyles } from './studentStyles';
-import Main from '../main/main';
+import Main from '../main/MainContent';
 import { axiosInstance as axios } from '../../../config/axios';
 
 

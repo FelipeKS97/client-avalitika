@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import { useParams, useHistory, useRouteMatch } from "react-router-dom";
 
-import Main from '../main/main';
+import Main from '../main/MainContent';
 import useCustomSnackbar from '../../hooks/CustomSnackbar';
 import { 
   tableIcons, 

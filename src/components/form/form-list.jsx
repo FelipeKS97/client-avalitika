@@ -3,7 +3,7 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 
 import { useStyles } from './formStyles'
-import Main from '../main/main'
+import Main from '../main/MainContent'
 import { NoContent } from '../main/NoContent'
 import FormCard from './form-card'
 import EditFormHeader from './form-header'

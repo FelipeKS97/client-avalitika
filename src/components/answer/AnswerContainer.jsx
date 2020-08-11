@@ -12,7 +12,7 @@ import { useHistory, useRouteMatch } from "react-router-dom";
 import useCustomSnackbar from '../../hooks/CustomSnackbar'
 import ReactFormGenerator from '../form/form'
 import { useStyles } from './answerStyles'
-import Main from '../main/main'
+import Main from '../main/MainContent'
 import FormCard from '../form/form-card'
 import { axiosInstance as axios } from '../../../config/axios'
 

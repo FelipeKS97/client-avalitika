@@ -23,7 +23,7 @@ import CustomLineChart from './CustomLineChart';
 import Summary from './Summary';
 import RecentAnswers from './RecentAnswers';
 import CustomPieChart from './CustomShapePieChart'
-import Main from '../main/Main'
+import Main from '../main/MainContent'
 import useCustomSnackbar from '../../hooks/CustomSnackbar'
 import { axiosInstance as axios } from '../../../config/axios'
 

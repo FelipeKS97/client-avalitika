@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 import { useHistory, useRouteMatch } from "react-router-dom";
 
 import { useStyles } from './reportStyles'
-import Main from '../main/main'
+import Main from '../main/MainContent'
 import ReportItem from './ReportItem'
 import { axiosInstance as axios } from '../../../config/axios'
 
