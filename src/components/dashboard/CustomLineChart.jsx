@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTheme } from '@material-ui/core/styles';
-import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import Title from './Title';
 
 // Generate Data
@@ -8,7 +8,7 @@ function createData(time, amount) {
   return { time, amount };
 }
 
-const data = [
+const exampleData = [
   createData('Jan', 0),
   createData('Fev', 0),
   createData('Mar', 0),
@@ -23,15 +23,26 @@ const data = [
   createData('Dez', 100),
 ];
 
-export default function Chart() {
+const CustomTooltip = ({ active, payload, label, palette }) => {
+  if (active) {
+    return (
+      <div style={{backgroundColor: '#1A1C4A', padding: '0.5px', borderRadius: '3px'}} className="custom-tooltip">
+        <p style={{color: '#fff',  padding: '0.5px'}} >{`Respostas : ${payload[0].value}`}</p>
+      </div>
+    );
+  }
+  return null;
+};
+
+export default function CustomLineChart({data, title, yLabel}) {
   const { palette } = useTheme();
 
   return (
     <>
-      <Title>Respostas</Title>
+      <Title>{ title || 'Respostas'}</Title>
       <ResponsiveContainer>
         <LineChart
-          data={data}
+          data={data || exampleData}
           margin={{
             top: 16,
             right: 16,
@@ -46,9 +57,13 @@ export default function Chart() {
               position="left"
               style={{ textAnchor: 'middle', fill: palette.text.primary }}
             >
-              Quantidade
+              { yLabel || 'Quantidade' }
             </Label>
           </YAxis>
+          {/* <Tooltip 
+            //content={<CustomTooltip palette={palette} />} 
+          /> */}
+          {/* <Legend /> */}
           <Line type="monotone" dataKey="amount" stroke={palette.primary.main} dot={false} />
         </LineChart>
       </ResponsiveContainer>

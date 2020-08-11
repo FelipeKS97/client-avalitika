@@ -21,7 +21,10 @@ import { removeStringTags } from "../../utils/convert";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
-    margin: "0rem 1rem"
+    margin: "0rem 1rem",
+    border: "0.5px none #1A1C4A",
+    borderRadius: "5px",
+    backgroundColor: "#fff"
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
@@ -35,11 +38,11 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
   },
   graphDetails: {
-    display: 'flex', 
-    flexDirection: 'row-reverse'
+    display: "flex", 
+    flexDirection: "row-reverse"
   },
   reportHeader: {
-    margin: '1rem 2rem'
+    margin: "1rem 2rem"
   }
 }));
 
@@ -71,6 +74,7 @@ export default function ReportItem({ form, answers, professor, discipline }) {
       </div>
       {jsonForm &&
         jsonForm.map((item) => {
+
           if (!item.static) {
             return (
               <Accordion disabled={isDisabled} TransitionProps={{ unmountOnExit: true }} key={item.id}>

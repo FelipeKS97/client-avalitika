@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -19,11 +19,13 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from './listItems';
-import Chart from './Chart';
-import Deposits from './Deposits';
-import Orders from './RecentAnswers';
+import CustomLineChart from './CustomLineChart';
+import Summary from './Summary';
+import RecentAnswers from './RecentAnswers';
 import CustomPieChart from './CustomShapePieChart'
 import Main from '../main/Main'
+import useCustomSnackbar from '../../hooks/CustomSnackbar'
+import { axiosInstance as axios } from '../../../config/axios'
 
 
 const drawerWidth = 240;
@@ -33,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
   },
   toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
+    paddingRight: 24,
   },
   toolbarIcon: {
     display: 'flex',
@@ -109,37 +111,65 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Dashboard() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [summary, setSummary] = useState()
+  const [period, setPeriod] = useState()
+  const [course, setCourse] = useState()
+  const [snackbar, setSnackbarStatus] = useCustomSnackbar() 
+  const { get } = axios
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsError(false);
+      setIsLoading(true);
+      try {
+        const reqInfo = await get('/coord/info')
+        setPeriod(reqInfo.data[0])
+        setCourse(reqInfo.data[1])
+        let queryString = `?period_id=${reqInfo.data[0].id}&course_id=${reqInfo.data[1].course_id}`
+        const reqSummary = await get(`/coord/dashboard${queryString}`)
+        setSummary(reqSummary.data)
+      } catch (error) {
+        setSnackbarStatus({
+          open: true, 
+          message: "Ocorreu um erro no carregamento."
+        })
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchData()
+  },[])
+
 
   return (
-    <Main title='Painel'>
+    <Main title={ period && `Semestre Atual: ${period.description}` || 'Carregando...'}>
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={2}>
           {/* Chart */}
           <Grid item xs={12} md={6} lg={8}>
             <Paper className={fixedHeightPaper}>
-              <Chart />
+              <CustomLineChart data={summary && summary.months} />
             </Paper>
           </Grid>
+          {/* Summary */}
           <Grid item xs={12} md={6} lg={4}>
             <Paper className={fixedHeightPaper}>
-              <CustomPieChart /> 
+              <Summary data={summary} /> 
             </Paper>
           </Grid>
           {/* Recent Answers */}
           <Grid item xs={12}>
-            <Paper className={classes.paper}>
-              <Orders />
-            </Paper>
+            {!isLoading && !isError &&
+              <Paper className={classes.paper}>
+                <RecentAnswers data={summary} />
+              </Paper>
+            }
           </Grid>
         </Grid>
+        { snackbar }
       </Container>
     </Main>
   );

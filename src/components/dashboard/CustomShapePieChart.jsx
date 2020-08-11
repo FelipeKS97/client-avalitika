@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ResponsiveContainer, PieChart, Pie, Sector } from 'recharts';
 import Title from './Title';
 
-const data = [
+const exampleData = [
   { name: 'BSI-2012', value: 400 },
   { name: 'BSI-2018', value: 300 },
   { name: 'GD-2017', value: 100 },
@@ -56,7 +56,7 @@ const renderActiveShape = (props) => {
 };
 
 
-export default function CustomShapePieChart() {
+export default function CustomShapePieChart({ data, title }) {
 
   const [activeIndex, setActiveIndex] = useState(0)
 
@@ -66,7 +66,7 @@ export default function CustomShapePieChart() {
 
   return (
     <>
-      <Title>Grades Avaliadas</Title>
+      <Title>{ title || 'Grades Avaliadas'}</Title>
       <ResponsiveContainer>
         <PieChart
           width={300} 
@@ -81,7 +81,7 @@ export default function CustomShapePieChart() {
           <Pie
             activeIndex={activeIndex}
             activeShape={renderActiveShape}
-            data={data}
+            data={data || exampleData}
             cx={175}
             cy={73}
             innerRadius={30}

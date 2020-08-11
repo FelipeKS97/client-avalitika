@@ -81,31 +81,32 @@ export default function AnswerForm() {
   };
 
   async function sendAnswers(json_answer) {
-      if(discipline && period && professor) {
-        let randomNumber = Math.floor((Math.random() * 99809875) + 1);
-        let obj = {
-            discipline_id: discipline.id,
-            professor_id: professor.professor_id,
-            period_id: period.id,
-            verification_id: `${randomNumber}`,
-            formulary_id: parseInt(id),
-            json_answer
-        }
-
-        try {
-          const req = await post('/student/formulary', obj)
-          setSnackbarStatus({
-            open: true, 
-            message: "Resposta submetida com sucesso."
-          })
-          push(`${url}`)
-        } catch (error) {
-          setSnackbarStatus({ 
-            open: true, 
-            message: "Ocorreu um erro no envio, tente mais tarde."
-          })
-        }
+    if(discipline && period && professor) {
+      let randomNumber = Math.floor((Math.random() * 99809875) + 1);
+      let obj = {
+        discipline_id: discipline.id,
+        professor_id: professor.professor_id,
+        period_id: period.id,
+        verification_id: `${randomNumber}`,
+        formulary_id: parseInt(id),
+        json_answer
       }
+
+      try {
+        const req = await post('/student/formulary', obj)
+        setSnackbarStatus({
+          open: true, 
+          message: "Resposta submetida com sucesso."
+        })
+        push(`${url}`)
+      } catch (error) {
+        const errMessage = error.response.data.message
+        setSnackbarStatus({ 
+          open: true, 
+          message: errMessage || "Ocorreu um erro no envio, tente novamente mais tarde."
+        })
+      }
+    }
   }
 
 
@@ -127,7 +128,7 @@ export default function AnswerForm() {
         form_action="/"
         form_method="POST"
         read_only={isSelected}
-        onSubmit={(data)=> sendAnswers(data)}
+        onSubmit={(data) => sendAnswers(data)}
         hide_actions={false}
         data={JSON.parse(json_format)} 
       />
@@ -159,7 +160,7 @@ export default function AnswerForm() {
               )}
             />
           </Grid> 
-          <Grid item xs={3} md={3} lg={6}>
+          <Grid item xs={4} md={4} lg={6}>
             <Autocomplete
               {...defaultProfsProps}
               value={professor}

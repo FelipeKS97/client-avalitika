@@ -7,23 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
-
-// Generate Order Data
-function createData(id, date, name, shipTo, paymentMethod, amount) {
-  return { id, date, name, shipTo, paymentMethod, amount };
-}
-
-const rows = [
-  createData(0, '16 Mar, 2020', 'Avaliação Semestral', 'FNBD', 'Fulano', 312.44),
-  createData(1, '16 Mar, 2020', 'Avaliação Semestral', 'ALGO', 'Ciclano', 866.99),
-  createData(2, '16 Mar, 2020', 'Avaliação Semestral', 'CALC', 'Beltrano', 100.81),
-  createData(3, '16 Mar, 2020', 'Avaliação Semestral', 'FPIN', 'Fulano', 654.39),
-  createData(4, '15 Mar, 2020', 'Satisfação Institucional', 'PROO', 'Beltrano', 212.79),
-];
-
-function preventDefault(event) {
-  event.preventDefault();
-}
+import { convertRecentAnswers } from '../../utils/convert';
 
 const useStyles = makeStyles((theme) => ({
   seeMore: {
@@ -31,11 +15,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Orders() {
+export default function RecentAnswers({ data }) {
   const classes = useStyles();
   return (
+    data && data.data.length > 0 ? 
     <>
-      <Title>Respostas Recentes</Title>
+      <Title>Últimas Respostas</Title>
       <Table size="small">
         <TableHead>
           <TableRow>
@@ -46,21 +31,21 @@ export default function Orders() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {convertRecentAnswers(data.data).map((row) => (
             <TableRow key={row.id}>
               <TableCell>{row.date}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.shipTo}</TableCell>
-              <TableCell>{row.paymentMethod}</TableCell>
+              <TableCell>{row.title}</TableCell>
+              <TableCell>{row.discipline}</TableCell>
+              <TableCell>{row.professor}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
       <div className={classes.seeMore}>
-        <Link color="primary" href="#" onClick={preventDefault}>
-          Visualizar mais respostas
+        <Link color="primary" href="/forms">
+          Visualizar formulários
         </Link>
       </div>
-    </>
+    </> : null
   );
 }

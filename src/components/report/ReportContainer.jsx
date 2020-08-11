@@ -3,6 +3,7 @@ import Container from '@material-ui/core/Container';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 import useCustomSnackbar from '../../hooks/CustomSnackbar'
 import { useParams } from "react-router-dom";
 import { useHistory, useRouteMatch } from "react-router-dom";
@@ -131,7 +132,9 @@ export default function AnswerForm() {
           </Grid>     
         </Grid>
 
-        <Grid container spacing={3} direction="row"
+        {/* <Button id="print-button" onClick={() => printPDF() }>GERAR PDF</Button> */}
+
+        <Grid id="test-site" container spacing={3} direction="row"
             justify="left"
             alignItems="top"
         >

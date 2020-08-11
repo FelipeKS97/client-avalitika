@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 
 import { useStyles } from './formStyles'
 import Main from '../main/main'
+import { NoContent } from '../main/NoContent'
 import FormCard from './form-card'
 import EditFormHeader from './form-header'
 import { axiosInstance as axios } from '../../../config/axios'
@@ -50,6 +51,7 @@ export default function FormListContainer() {
 
   const filteredForms = formList.filter(form => form.curriculum.course_id === courseId)
   const haveContent = filteredForms.length > 0
+  const isEmpty = !isError && !isLoading
 
   return (
     <Main title={'Semestre Atual: 2020.1'}>
@@ -70,7 +72,8 @@ export default function FormListContainer() {
               </Grid>
             ))
             :
-            <> {!isError && Array.from({ length: 8 }, (x, i) => (
+            <> 
+            {!isError && isLoading ? Array.from({ length: 8 }, (x, i) => (
                 <Grid key={i} item xs={12} md={4} lg={3}>
                   <FormCard 
                     isError={isError} 
@@ -78,7 +81,8 @@ export default function FormListContainer() {
                     haveContent={haveContent}
                   />
                 </Grid>
-              ))}
+              )) : <NoContent title={"Ops, nada por aqui. Que tal criar um formulário?"} />
+            }
             </>
         }
           </Grid>
