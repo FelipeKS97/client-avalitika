@@ -20,11 +20,6 @@ export default function Main(props) {
     setOpen(false);
   };
 
-  // if(location.pathname !== "/form") {
-  //   let link = document.head.querySelector(".addedCss")
-  //   link.parentNode.removeChild(link)
-  // }
-
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (

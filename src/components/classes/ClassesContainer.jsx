@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import useCustomSnackbar from '../../hooks/CustomSnackbar'
 import { axiosInstance as axios } from '../../../config/axios'
 import { useStyles } from './classesStyles'
-import Main from '../main/main'
+import Main from '../main/MainContent'
 import ClassesTable from './ClassesTable'
 
 export default function ClassesContainer() {

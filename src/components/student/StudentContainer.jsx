@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid';
 
 import useCustomSnackbar from '../../hooks/CustomSnackbar'
 import { useStyles } from './studentStyles'
-import Main from '../main/main'
+import Main from '../main/MainContent'
 import FormCard from '../form/form-card'
 import { axiosInstance as axios } from '../../../config/axios'
 

@@ -7,7 +7,7 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
 
 import { useStyles } from './mainStyles'
-import Main from './main'
+import Main from './MainContent'
 import { axiosInstance as axios } from '../../../config/axios'
 import SchoolIcon from '../../assets/school1.svg'
 import FormIcon from '../../assets/form1.svg'
