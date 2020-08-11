@@ -8,6 +8,10 @@
     "dist"
   ],
   "author": "Felipe C. Carvalho",
+  "engines": {
+    "npm": "6.9.0",
+    "node": "10.16.3"
+  },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
