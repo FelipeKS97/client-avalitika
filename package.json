@@ -89,8 +89,7 @@
   },
   "scripts": {
     "build": "webpack -p --config webpack.production.config.js",
-    "build:dev": "webpack --mode development",
-    "prepublish": "npm run build:lib && npm run build",
+    "prepublish": "npm run build",
     "watch": "webpack --watch",
     "start": "webpack-dev-server --hot --inline --mode development",
     "transpile": "babel --out-dir lib src --copy-files"
