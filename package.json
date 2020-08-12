@@ -94,7 +94,8 @@
     "build": "webpack -p --config webpack.production.config.js",
     "prepublish": "npm run build",
     "watch": "webpack --watch",
-    "start": "webpack-dev-server --hot --inline --mode development",
+    "start-server": "webpack-dev-server --hot --inline --mode development",
+    "start": "npm run build && node server.js",
     "transpile": "babel --out-dir lib src --copy-files"
   }
 }
