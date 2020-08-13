@@ -7,7 +7,7 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
 
 import { useStyles } from './mainStyles'
-import Main from './MainContent'
+import MainContent from './MainContent'
 import { axiosInstance as axios } from '../../../config/axios'
 import SchoolIcon from '../../assets/school1.svg'
 import FormIcon from '../../assets/form1.svg'
@@ -73,7 +73,7 @@ export default function MainContainer({ history }) {
     }
 
   return (
-    <Main title={period && `Semestre Atual: ${period}`}>
+    <MainContent title={period && `Semestre Atual: ${period}`}>
         <Container maxWidth="lg" className={classes.container}>
             <Grid container spacing={3} direction="row"
                 justify="center"
@@ -81,6 +81,6 @@ export default function MainContainer({ history }) {
                 { renderGrid(gridData, history) }  
             </Grid>
         </Container>
-    </Main>
+    </MainContent>
   );
 }

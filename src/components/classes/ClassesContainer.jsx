@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import useCustomSnackbar from '../../hooks/CustomSnackbar'
 import { axiosInstance as axios } from '../../../config/axios'
 import { useStyles } from './classesStyles'
-import Main from '../main/MainContent'
+import MainContent from '../main/MainContent'
 import ClassesTable from './ClassesTable'
 
 export default function ClassesContainer() {
@@ -54,7 +54,7 @@ export default function ClassesContainer() {
   };
 
   return (
-    <Main title={'Turmas'}>
+    <MainContent title={'Turmas'}>
       <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3} direction="row"
             justify="left"
@@ -96,7 +96,7 @@ export default function ClassesContainer() {
           </Grid>
           {snackbar}
       </Container>
-    </Main>
+    </MainContent>
   );
 }
 

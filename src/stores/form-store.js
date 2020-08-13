@@ -1,5 +1,6 @@
 import Store from 'beedle';
 import { get, post, put } from 'axios';
+import { BASE_URL } from '../../config/axios'
 
 let _saveUrl;
 
@@ -12,7 +13,7 @@ const formStore = new Store({
     async load(context, { id, loadUrl, data }) {
       if (id) {
         try {
-          let req = await get(`http://localhost:3333/v1/coord/formulary/${id}`)
+          let req = await get(`${BASE_URL}/coord/formulary/${id}`)
           req.data.json_format = JSON.parse(req.data.json_format)
           this.setData(context, req.data)
         } catch (error) {
@@ -48,7 +49,7 @@ const formStore = new Store({
         json_format 
       }
       try {
-        const request = await put(`http://localhost:3333/v1/coord/formulary/${id}`, obj);
+        const request = await put(`${BASE_URL}/coord/formulary/${id}`, obj);
       } catch (error) {
         console.log({error})
       }

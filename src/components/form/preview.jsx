@@ -221,13 +221,15 @@ export default class Preview extends React.Component {
               />
           }
         <div>
-          <Button size="large" variant="contained" color="primary" className="pull-right" 
-            style={{ marginRight: '10px' }}
-            onClick={() => formId && store.dispatch('saveForm', { json_format: data, id: formId })}
-            startIcon={<SaveOutlinedIcon />}
-          >
-          Salvar
-          </Button>
+          {formId && 
+            <Button size="large" variant="contained" color="primary" className="pull-right" 
+              style={{ marginRight: '10px' }}
+              onClick={() => store.dispatch('saveForm', { json_format: data, id: parseInt(formId) })}
+              startIcon={<SaveOutlinedIcon />}
+            >
+            Salvar
+            </Button>
+          }
         </div>
         
       </div>

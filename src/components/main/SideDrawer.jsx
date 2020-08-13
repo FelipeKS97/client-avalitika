@@ -45,16 +45,13 @@ export default function SideDrawer({open, handleDrawerClose}) {
   return (
 
     <Drawer
-    variant="permanent"
-    classes={{
-        paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-    }}
-    open={open}
-    // style={{display: 'flex'}}
+     variant="temporary"
+     classes={{paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose)}}
+     open={open}
     >
         <div className={classes.toolbarIcon}>
             <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
+                <ChevronLeftIcon />
             </IconButton>
         </div>
         

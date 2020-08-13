@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid';
 
 import useCustomSnackbar from '../../hooks/CustomSnackbar'
 import { useStyles } from './studentStyles'
-import Main from '../main/MainContent'
+import MainContent from '../main/MainContent'
 import FormCard from '../form/form-card'
 import { axiosInstance as axios } from '../../../config/axios'
 
@@ -96,7 +96,7 @@ export default function FormListContainer() {
   const haveContent = formList.length > 0
 
   return (
-    <Main title={'Formulários Disponíveis'}>
+    <MainContent title={'Formulários Disponíveis'}>
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3} direction="row"
           justify="left"
@@ -163,6 +163,6 @@ export default function FormListContainer() {
           </Grid>
           {snackbar}
       </Container>
-    </Main>
+    </MainContent>
   )
 }

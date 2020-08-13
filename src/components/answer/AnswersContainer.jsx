@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import { useParams, useHistory, useRouteMatch } from "react-router-dom";
 
-import Main from '../main/MainContent';
+import MainContent from '../main/MainContent';
 import useCustomSnackbar from '../../hooks/CustomSnackbar';
 import { 
   tableIcons, 
@@ -57,7 +57,7 @@ export default function AnswersContainer() {
   console.log({url})
 
   return (
-    <Main title={'Respostas'}>
+    <MainContent title={'Respostas'}>
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3} direction="row"
           justify="left"
@@ -96,6 +96,6 @@ export default function AnswersContainer() {
         </Grid>
         {snackbar}
       </Container>
-    </Main>
+    </MainContent>
   );
 }

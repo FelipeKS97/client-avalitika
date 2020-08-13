@@ -23,7 +23,7 @@ import CustomLineChart from './CustomLineChart';
 import Summary from './Summary';
 import RecentAnswers from './RecentAnswers';
 import CustomPieChart from './CustomShapePieChart'
-import Main from '../main/MainContent'
+import MainContent from '../main/MainContent'
 import useCustomSnackbar from '../../hooks/CustomSnackbar'
 import { axiosInstance as axios } from '../../../config/axios'
 
@@ -145,7 +145,7 @@ export default function Dashboard() {
 
 
   return (
-    <Main title={ period && `Semestre Atual: ${period.description}` || 'Carregando...'}>
+    <MainContent title={ period && `Semestre Atual: ${period.description}` || 'Carregando...'}>
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={2}>
           {/* Chart */}
@@ -171,6 +171,6 @@ export default function Dashboard() {
         </Grid>
         { snackbar }
       </Container>
-    </Main>
+    </MainContent>
   );
 }
