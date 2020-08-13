@@ -9,7 +9,7 @@ import { useHistory, useRouteMatch } from "react-router-dom";
 
 import ReactFormGenerator from '../form/form';
 import { useStyles } from './studentStyles';
-import Main from '../main/MainContent';
+import MainContent from '../main/MainContent';
 import { axiosInstance as axios } from '../../../config/axios';
 
 
@@ -136,7 +136,7 @@ export default function AnswerForm() {
   }
 
   return (
-    <Main title={form && form.title}>
+    <MainContent title={form && form.title}>
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3} direction="row"
           justify="left"
@@ -197,6 +197,6 @@ export default function AnswerForm() {
         </Grid>   
         { snackbar }
       </Container>
-    </Main>
+    </MainContent>
   )
 }

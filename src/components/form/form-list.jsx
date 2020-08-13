@@ -3,7 +3,7 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 
 import { useStyles } from './formStyles'
-import Main from '../main/MainContent'
+import MainContent from '../main/MainContent'
 import { NoContent } from '../main/NoContent'
 import FormCard from './form-card'
 import EditFormHeader from './form-header'
@@ -54,7 +54,7 @@ export default function FormListContainer() {
   const isEmpty = !isError && !isLoading
 
   return (
-    <Main title={'Semestre Atual: 2020.1'}>
+    <MainContent title={'Semestre Atual: 2020.1'}>
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3} direction="row"
             justify="left"
@@ -90,6 +90,6 @@ export default function FormListContainer() {
           {snackbar}
           {/* <PaginationContainer /> */}
       </Container>
-    </Main>
+    </MainContent>
   )
 }

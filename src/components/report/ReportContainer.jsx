@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 import { useHistory, useRouteMatch } from "react-router-dom";
 
 import { useStyles } from './reportStyles'
-import Main from '../main/MainContent'
+import MainContent from '../main/MainContent'
 import ReportItem from './ReportItem'
 import { axiosInstance as axios } from '../../../config/axios'
 
@@ -84,7 +84,7 @@ export default function AnswerForm() {
   };
 
   return (
-    <Main title={'Relatório'}>
+    <MainContent title={'Relatório'}>
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3} direction="row"
           justify="left"
@@ -142,6 +142,6 @@ export default function AnswerForm() {
         </Grid>   
         { snackbar }
       </Container>
-    </Main>
+    </MainContent>
   )
 }

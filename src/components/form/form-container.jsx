@@ -7,7 +7,7 @@ import store from "../../stores/form-store";
 import { items } from "../../../config/form-items";
 import Demobar from "./demobar";
 import FormBuilder from "./index.jsx";
-import Main from "../main/MainContent";
+import MainContent from "../main/MainContent";
 import { axiosInstance as axios } from "../../../config/axios";
 
 export default function FormContainer() {
@@ -45,7 +45,7 @@ export default function FormContainer() {
 
   return (
     <>
-      <Main title={form && form.title}>
+      <MainContent title={form && form.title}>
         {form && (
           <div
             style={{
@@ -77,7 +77,7 @@ export default function FormContainer() {
           toolbarItems={items}
           id={id}
         />
-      </Main>
+      </MainContent>
     </>
   );
 }
