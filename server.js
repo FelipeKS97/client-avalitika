@@ -1,11 +1,11 @@
 const express = require('express');
-const favicon = require('express-favicon');
+// const favicon = require('express-favicon');
 const bodyParser = require('body-parser');
 const path = require('path');
 const port = process.env.PORT || 8080;
 const app = express();
 // app.use(favicon(__dirname + '/dist/public/images/favicon.ico'));
-app.use(favicon(path.join(__dirname, 'dist', 'public/images/favicon.ico')));
+// app.use(favicon(path.join(__dirname, 'dist', 'public/images/favicon.ico')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 if (process.env.NODE_ENV === 'production') {
