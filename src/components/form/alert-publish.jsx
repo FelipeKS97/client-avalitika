@@ -39,7 +39,6 @@ export default function AlertPublish({ id, status, published_at, setSnackbarStat
       setNewStatus(true)
       setUpdatedStatus(request.data.status)
     } catch (error) {
-      console.log(error)
       handleClose()
       setSnackbarStatus({ 
         open: true, 

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // const express = require('express');
 // const favicon = require('express-favicon');
 // const path = require('path');
@@ -18,6 +19,16 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const app = express();
 const port = process.env.PORT || 8080;
+=======
+const express = require('express');
+const favicon = require('express-favicon');
+const bodyParser = require('body-parser');
+const path = require('path');
+const port = process.env.PORT || 8080;
+const app = express();
+// app.use(favicon(__dirname + '/dist/public/images/favicon.ico'));
+app.use(favicon(path.join(__dirname, 'dist', 'public/images/favicon.ico')));
+>>>>>>> 270d3c947afddd051a0ba21ec3bf8435f7fb6ddb
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 if (process.env.NODE_ENV === 'production') {
