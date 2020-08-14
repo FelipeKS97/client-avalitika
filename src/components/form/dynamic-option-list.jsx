@@ -22,7 +22,6 @@ export default class DynamicOptionList extends React.Component {
   editOption(option_index, e) {
     const this_element = this.state.element;
     const val = (this_element.options[option_index].value !== this._setValue(this_element.options[option_index].text)) ? this_element.options[option_index].value : this._setValue(e.target.value);
-    console.log({val})
     this_element.options[option_index].text = e.target.value;
     this_element.options[option_index].value = val;
     this.setState({

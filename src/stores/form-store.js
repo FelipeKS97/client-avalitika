@@ -51,7 +51,6 @@ const formStore = new Store({
       try {
         const request = await put(`${BASE_URL}/coord/formulary/${id}`, obj);
       } catch (error) {
-        console.log({error})
       }
     },
   },

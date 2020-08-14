@@ -36,7 +36,6 @@ export default class Demobar extends React.Component {
 
     store.subscribe(state => update(state.data));
 
-    console.log({store})
   }
   
 
@@ -74,8 +73,7 @@ export default class Demobar extends React.Component {
 
   // eslint-disable-next-line no-unused-vars
   _onSubmit(data) {
-    console.log('onSubmit', data);
-    // Place code to post json data to server here
+    // console.log('onSubmit', data);
   }
 
   render() {

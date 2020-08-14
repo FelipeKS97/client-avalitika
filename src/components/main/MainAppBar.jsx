@@ -17,7 +17,6 @@ import { useHistory } from "react-router-dom";
 export default function MainAppBar() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  console.log({open})
   function handleDrawerOpen() {
     setOpen(true);
   }

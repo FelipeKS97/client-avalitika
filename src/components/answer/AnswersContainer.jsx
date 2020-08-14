@@ -54,8 +54,6 @@ export default function AnswersContainer() {
 
   const haveContent = answersList.length > 0 
 
-  console.log({url})
-
   return (
     <MainContent title={'Respostas'}>
       <Container maxWidth="lg" className={classes.container}>
