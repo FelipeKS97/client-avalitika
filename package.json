@@ -96,6 +96,7 @@
     "webpack-dev-server": "^3.11.0"
   },
   "scripts": {
+    "build-netlify": "webpack -p --config webpack.production.config.js",
     "build": "webpack -p --config webpack.production.config.js",
     "prepublish": "npm run build",
     "watch": "webpack --watch",
