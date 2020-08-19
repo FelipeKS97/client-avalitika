@@ -44,21 +44,18 @@ export default function ClassesContainer() {
   },[])
 
   const defaultProps = {
-    //options: curricula,
     options: curriculumList,
-    getOptionLabel: (option) => option.name,
+    getOptionLabel: (option) => option.name ? option.name : '' ,
   };
   const defaultPeriodProps = {
     options: periodList,
-    getOptionLabel: (option) => option.description,
+    getOptionLabel: (option) => option.description ? option.description : '',
   };
 
   return (
     <MainContent title={'Turmas'}>
       <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3} direction="row"
-            justify="left"
-            alignItems="center">
+          <Grid container spacing={3} direction="row">
               <Grid item xs={6} md={10} lg={10}>
                 <Autocomplete
                   {...defaultProps}

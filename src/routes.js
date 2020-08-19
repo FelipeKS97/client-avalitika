@@ -4,9 +4,6 @@ import {
   Switch,
   Route,
   useLocation,
-  useParams,
-  Redirect,
-  Link
 } from "react-router-dom";
 
 import Dashboard from './components/dashboard/Dashboard';
@@ -24,24 +21,24 @@ export default function RouteConfig() {
   
   return (
     <Router>
-        <Route exact path='/' component={MainContainer} />
-        <Route exact path='/dashboard' component={Dashboard} />
-        <Route exact path='/classes' component={ClassesContainer} />
-        <Switch>
-          <Route path='/forms/:id' component={FormContainer} />
-          <Route exact path='/forms' component={FormListContainer} />
-        </Switch>
-        <Switch>
-          <Route path='/student-form/:id' component={AnswerFormContainer} />
-          <Route exact path='/student-form' component={StudentContainer} />
-        </Switch>
-        <Switch>
-          <Route path='/answers/:id/report' component={ReportContainer} />
-          <Route path='/answers/:id' component={AnswersContainer} />
-        </Switch>
-        <Route path='/answer/:id' component={AnswerContainer} />
-        {/* <Route exact path="*" component={NoMatch} /> */}
-        {/* <Redirect from="*" to="/forms" /> */}
+      <Route exact path='/' component={MainContainer} />
+      <Route exact path='/dashboard' component={Dashboard} />
+      <Route exact path='/classes' component={ClassesContainer} />
+      <Switch>
+        <Route path='/forms/:id' component={FormContainer} />
+        <Route exact path='/forms' component={FormListContainer} />
+      </Switch>
+      <Switch>
+        <Route path='/student-form/:id' component={AnswerFormContainer} />
+        <Route exact path='/student-form' component={StudentContainer} />
+      </Switch>
+      <Switch>
+        <Route path='/answers/:id/report' component={ReportContainer} />
+        <Route path='/answers/:id' component={AnswersContainer} />
+      </Switch>
+      <Route path='/answer/:id' component={AnswerContainer} />
+      {/* <Route exact path="*" component={NoMatch} /> */}
+      {/* <Redirect from="*" to="/forms" /> */}
     </Router>
   );
 }
@@ -50,9 +47,9 @@ function NoMatch() {
   let location = useLocation()
 
   return (
-    <div>
+    <div style={{ display: 'flex', justifyContent: 'center'}}>
       <h3>
-        O caminho <code>{location.pathname}</code> não foi encontrado.
+        A página <code>{location.pathname}</code> não foi encontrado.
       </h3>
     </div>
   );

@@ -1,7 +1,7 @@
 {
   "name": "client-avalitika",
   "version": "0.1.0",
-  "description": "A webclient designed to operate Avalitika API services.",
+  "description": "A webapp designed to help colleges in auto-evaluation process.",
   "main": "dist/index.js",
   "files": [
     "lib",
@@ -93,11 +93,11 @@
     "webpack-dev-server": "^3.11.0"
   },
   "scripts": {
-    "build-netlify": "webpack -p --config webpack.production.config.js",
+    "build:netlify": "webpack -p --config webpack.production.config.js",
     "build": "webpack -p --config webpack.production.config.js",
     "prepublish": "npm run build",
     "watch": "webpack --watch",
-    "start-server": "webpack-dev-server --hot --inline --mode development",
+    "start:local": "webpack-dev-server --hot --inline --mode development",
     "start": "npm run build && node server.js",
     "transpile": "babel --out-dir lib src --copy-files"
   }

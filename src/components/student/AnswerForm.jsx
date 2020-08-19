@@ -3,6 +3,7 @@ import Container from '@material-ui/core/Container';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 import useCustomSnackbar from '../../hooks/CustomSnackbar'
 import { useParams } from "react-router-dom";
 import { useHistory, useRouteMatch } from "react-router-dom";
@@ -10,6 +11,7 @@ import { useHistory, useRouteMatch } from "react-router-dom";
 import ReactFormGenerator from '../form/form';
 import { useStyles } from './studentStyles';
 import MainContent from '../main/MainContent';
+import VerificationDialog from './VerificationDialog'
 import { axiosInstance as axios } from '../../../config/axios';
 
 
@@ -17,6 +19,9 @@ export default function AnswerForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [form, setForm] = useState()
+  const [verificationId, setVerificationId] = useState('')
+  const [isVerified, setIsVerified] = useState(false)
+  const [openDialog, setOpenDialog] = useState(true);
   const [answers, setAnswers] = useState({})
   const [period, setPeriod] = useState()
   const [discipline, setDiscipline] = useState(null)
@@ -25,10 +30,20 @@ export default function AnswerForm() {
   const [professorList, setProfessorList] = useState([])
   const [snackbar, setSnackbarStatus] = useCustomSnackbar() 
   const classes = useStyles();
+  const randomNumber = Math.floor((Math.random() * 99809875) + 1);
   const { id } = useParams()
   const { push } = useHistory()
   const { url } = useRouteMatch()
   const { get, post } = axios
+
+  const verificationProps = {
+    openDialog,
+    setOpenDialog,
+    setIsVerified,
+    setVerificationId,
+    isVerified,
+    verificationId
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,12 +97,11 @@ export default function AnswerForm() {
 
   async function sendAnswers(json_answer) {
     if(discipline && period && professor) {
-      let randomNumber = Math.floor((Math.random() * 99809875) + 1);
       let obj = {
         discipline_id: discipline.id,
         professor_id: professor.professor_id,
         period_id: period.id,
-        verification_id: `${randomNumber}`,
+        verification_id: verificationId,
         formulary_id: parseInt(id),
         json_answer
       }
@@ -111,23 +125,30 @@ export default function AnswerForm() {
 
 
   function RenderForm({ json_format, discipline, professor }) {
-    let isSelected = !(discipline && professor)
-
+    const isSelected = !!(discipline && professor)
     const handleWarning = () => {
-      isSelected && setSnackbarStatus({ 
-        open: true, 
-        message: "Por favor, selecione a disciplina e o professor."
-      })
+      // if(!isVerified) {
+      //   setSnackbarStatus({ 
+      //     open: true, 
+      //     message: "Por favor, faça primeiro a verificação."
+      //   })
+      // } else if(!isSelected) {
+      if(!isSelected) {
+      setSnackbarStatus({ 
+          open: true, 
+          message: "Por favor, selecione a disciplina e o professor."
+        })
+      }
     }
     return (
-    <div onClick={handleWarning} style={{padding: '2rem', width:'100vw'}}>
+    <div onClick={() => handleWarning()} style={{padding: '2rem', width:'100vw'}}>
       <ReactFormGenerator
         download_path=""
         answer_data={answers}
         action_name="Enviar Resposta"
         form_action="/"
         form_method="POST"
-        read_only={isSelected}
+        read_only={!isSelected}
         onSubmit={(data) => sendAnswers(data)}
         hide_actions={false}
         data={JSON.parse(json_format)} 
@@ -138,11 +159,8 @@ export default function AnswerForm() {
   return (
     <MainContent title={form && form.title}>
       <Container maxWidth="lg" className={classes.container}>
-        <Grid container spacing={3} direction="row"
-          justify="left"
-          alignItems="center"
-        >
-          <Grid item xs={4} md={4} lg={6}>
+        <Grid container spacing={3} direction="row">
+          <Grid item xs={6} md={6} lg={6}>
             <Autocomplete
               {...defaultDisciplineProps}
               classes={{paper: classes.paper}}
@@ -160,7 +178,7 @@ export default function AnswerForm() {
               )}
             />
           </Grid> 
-          <Grid item xs={4} md={4} lg={6}>
+          <Grid item xs={6} md={6} lg={6}>
             <Autocomplete
               {...defaultProfsProps}
               value={professor}
@@ -174,19 +192,23 @@ export default function AnswerForm() {
               <TextField 
                 variant={'outlined'} 
                 {...params} 
-                size={'medium'} 
+                size={'large'} 
                 label="Professor" 
                 margin="normal"
                 value={professor}
               />
               )}
             />
-          </Grid>     
+          </Grid>
+          {/* <Grid item xs={2} md={2} lg={2}>
+          <Button variant="outlined" color={ isVerified ?  "primary" : "#4caf50"} onClick={handleClickOpen}>
+            { isVerified ? 'Verificado' : 'Verificar'}
+          </Button>
+          </Grid>     */}
         </Grid>
 
         <Grid container spacing={3} direction="row"
-            justify="left"
-            alignItems="top"
+             
         >
           {form && 
             <RenderForm 
@@ -196,6 +218,7 @@ export default function AnswerForm() {
             />} 
         </Grid>   
         { snackbar }
+        <VerificationDialog {...verificationProps} />
       </Container>
     </MainContent>
   )

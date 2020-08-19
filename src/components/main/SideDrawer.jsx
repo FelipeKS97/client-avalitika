@@ -59,7 +59,7 @@ export default function SideDrawer({open, handleDrawerClose}) {
          
         { !isLoggedOut && gridData.map((d, i) => {
             return (
-                <div>
+                <div key={ i + 12}>
                     <ListItem button onClick={() => push(d.location) }>
                         <ListItemIcon>
                             <img className={classes.paperIcon} src={d.icon} alt={d.name} />

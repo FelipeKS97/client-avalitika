@@ -103,8 +103,7 @@ export default function AnswerContainer() {
         </Grid>
 
         <Grid container spacing={3} direction="row"
-            justify="left"
-            alignItems="top"
+             
         >
             {formAnswer && <RenderForm {...formAnswer} />} 
         </Grid>

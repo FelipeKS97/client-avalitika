@@ -135,8 +135,7 @@ export default function AnswerForm() {
         {/* <Button id="print-button" onClick={() => printPDF() }>GERAR PDF</Button> */}
 
         <Grid id="test-site" container spacing={3} direction="row"
-            justify="left"
-            alignItems="top"
+             
         >
           {ReportItem({form, answers, discipline, professor})}
         </Grid>   

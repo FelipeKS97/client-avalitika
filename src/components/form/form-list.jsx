@@ -56,10 +56,8 @@ export default function FormListContainer() {
   return (
     <MainContent title={'Semestre Atual: 2020.1'}>
       <Container maxWidth="lg" className={classes.container}>
-        <Grid container spacing={3} direction="row"
-            justify="left"
-            alignItems="top"
-        >{haveContent ?
+        <Grid container spacing={3} direction="row">
+          {haveContent ?
             filteredForms.map((el, i) => (
               <Grid key={i} item xs={12} md={4} lg={3}>
                 <FormCard 

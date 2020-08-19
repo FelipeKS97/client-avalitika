@@ -102,7 +102,7 @@ export default function FormListContainer() {
           justify="left"
           alignItems="center"
         >
-          <Grid item xs={4} md={4} lg={6}>
+          <Grid item xs={6} md={6} lg={6}>
               <Autocomplete
                 {...defaultCourseProps}
                 classes={{paper: classes.paper}}
@@ -121,7 +121,7 @@ export default function FormListContainer() {
                 )}
               />
           </Grid> 
-          <Grid item xs={3} md={3} lg={6}>
+          <Grid item xs={6} md={6} lg={6}>
               <Autocomplete
                 {...defaultCurriculumProps}
                 classes={{paper: classes.paper}}

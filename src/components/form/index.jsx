@@ -63,7 +63,7 @@ class ReactFormBuilder extends React.Component {
                 variables={this.props.variables}
                 editElement={this.state.editElement} 
                 formId={this.props.id} 
-              />{console.log({published_at})}
+              />
               {!published_at && <Toolbar {...toolbarProps} />}
            </div>
          </div>
