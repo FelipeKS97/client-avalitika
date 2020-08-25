@@ -33,13 +33,18 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
+    maxWidth: 200
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
   graphDetails: {
-    display: "flex", 
-    flexDirection: "row-reverse"
+    display: "flex",
+    flexDirection: "column"
+  },
+  selectorContainer: {
+    display: 'flex',
+    justifyContent: 'flex-end'
   },
   reportHeader: {
     margin: "1rem 2rem"
@@ -88,20 +93,23 @@ export default function ReportItem({ form, answers, professor, discipline }) {
                   </Typography>
                 </AccordionSummary>
                 <AccordionDetails className={item.options && classes.graphDetails}>
-                    {item.options && 
-                    <FormControl className={classes.formControl}>
-                      <InputLabel id="demo-simple-select-label">Tipo de Gráfico</InputLabel>
-                      <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        autoWidth
-                        value={chart.type}
-                        onChange={e => setChart({type: e.target.value})}
-                      >
-                        <MenuItem value={'bar'}>Barra</MenuItem>
-                        <MenuItem value={'circle'}>Circular</MenuItem>
-                      </Select>
-                    </FormControl>}
+                    {item.options &&
+                      <div className={classes.selectorContainer}>
+                        <FormControl className={classes.formControl}>
+                          <InputLabel id="demo-simple-select-label">Tipo de Gráfico</InputLabel>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            autoWidth
+                            value={chart.type}
+                            onChange={e => setChart({type: e.target.value})}
+                          >
+                            <MenuItem value={'bar'}>Barra</MenuItem>
+                            <MenuItem value={'circle'}>Circular</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </div>
+                    }
                     {ReportGenerator({answers, item, chart, professor, discipline, setTotalAnswers})}
                 </AccordionDetails>
                 {/* <AccordionActions>

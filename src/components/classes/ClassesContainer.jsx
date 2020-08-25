@@ -29,11 +29,11 @@ export default function ClassesContainer() {
         const reqInfo = await get('/coord/info')
         setPeriodList([reqInfo.data[0]])
         const reqCurricula = await get(`/coord/curricula?course_id=${reqInfo.data[1].course_id}`)
-        setCurriculumList(reqCurricula.data)    
+        setCurriculumList(reqCurricula.data)
       } catch (error) {
         setIsError(true);
-        setSnackbarStatus({ 
-          open: true, 
+        setSnackbarStatus({
+          open: true,
           message: "Ocorreu um erro no carregamento."
         })
       } finally {
@@ -56,7 +56,7 @@ export default function ClassesContainer() {
     <MainContent title={'Turmas'}>
       <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3} direction="row">
-              <Grid item xs={6} md={10} lg={10}>
+              <Grid item xs={6} md={6} lg={6}>
                 <Autocomplete
                   {...defaultProps}
                   classes={{paper: classes.paper}}
@@ -69,7 +69,7 @@ export default function ClassesContainer() {
                   )}
                 />
               </Grid>
-              <Grid item xs={2} md={2} lg={2}>
+              <Grid item xs={6} md={6} lg={6}>
                 <Autocomplete
                   {...defaultPeriodProps}
                   classes={{paper: classes.paper}}
@@ -83,8 +83,8 @@ export default function ClassesContainer() {
                   )}
                 />
               </Grid>
-              {period && curriculum &&          
-                <ClassesTable 
+              {period && curriculum &&
+                <ClassesTable
                   period={period}
                   curriculum={curriculum}
                   setSnackbarStatus={setSnackbarStatus}

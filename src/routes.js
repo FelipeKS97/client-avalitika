@@ -18,10 +18,12 @@ import AnswerContainer from './components/answer/AnswerContainer';
 import ReportContainer from './components/report/ReportContainer';
 
 export default function RouteConfig() {
-  
+  // This is a temporary route configuration.
+
   return (
     <Router>
-      <Route exact path='/' component={MainContainer} />
+      <Route exact path='/' component={StudentContainer} />
+      <Route exact path='/main' component={MainContainer} />
       <Route exact path='/dashboard' component={Dashboard} />
       <Route exact path='/classes' component={ClassesContainer} />
       <Switch>

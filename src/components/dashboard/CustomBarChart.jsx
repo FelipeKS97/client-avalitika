@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   BarChart,
   Bar,
@@ -6,9 +6,9 @@ import {
   XAxis,
   YAxis,
   Tooltip,
+  ResponsiveContainer,
   Legend,
 } from "recharts";
-
 
 const COLORS = [
   "#0088FE",
@@ -34,54 +34,48 @@ const CustomizedLabel = (props) => {
 
 export default function CustomBarChart({ data, setTotalAnswers }) {
   const totalAnswers = data.reduce((prev, cur) => {
-      return prev + cur.respostas;
+    return prev + cur.respostas;
   }, 0);
 
-  setTotalAnswers(totalAnswers)
-    
+  setTotalAnswers(totalAnswers);
+
   return (
-    <BarChart
-      width={500}
-      height={400}
-      data={data}
-      margin={{
-        top: 20,
-        right: 30,
-        left: 30,
-        bottom: 5,
-      }}
-      barSize={40}
-    >
-      <XAxis
-        dataKey="name"
-        scale="point"
-        padding={{ left: 10, right: 10 }}
-      />
-      <YAxis hide />
-      <Bar
-        label={<CustomizedLabel totalAnswers={totalAnswers} />}
-        dataKey="respostas"
-        background={{ fill: "#fff" }}
+    <ResponsiveContainer minHeight={400} width={"70%"}>
+      <BarChart
+        width={500}
+        height={400}
+        data={data}
+        margin={{
+          top: 20,
+          right: 30,
+          left: 30,
+          bottom: 5,
+        }}
+        barSize={35}
       >
-        {data.map((entry, index) => (
-          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-        ))}
-      </Bar>
-      <Tooltip />
-      <Legend 
-        verticalAlign="bottom" 
-        height={36}
-        payload={
-          data.map(
-            (item, index) => ({
-              id: item.name,
-              type: "square",
-              value: `${item.name}`,
-              color: COLORS[index % COLORS.length]
-            })
-          )
-        } 
-      />
-    </BarChart>
+        <XAxis dataKey="name" scale="point" padding={{ left: 10, right: 10 }} />
+        <YAxis hide />
+        <Bar
+          label={<CustomizedLabel totalAnswers={totalAnswers} />}
+          dataKey="respostas"
+          background={{ fill: "#fff" }}
+        >
+          {data.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          ))}
+        </Bar>
+        <Tooltip />
+        <Legend
+          verticalAlign="bottom"
+          height={5}
+          payload={data.map((item, index) => ({
+            id: item.name,
+            type: "square",
+            value: `${item.name}`,
+            color: COLORS[index % COLORS.length],
+          }))}
+        />
+      </BarChart>
+    </ResponsiveContainer>
   );
 }

@@ -26,7 +26,7 @@ export default function MainAppBar() {
   }
   const history = useHistory()
   const drawerProps = {
-    open,  
+    open,
     handleDrawerClose
   }
 
@@ -43,7 +43,7 @@ export default function MainAppBar() {
           >
             <MenuIcon />
           </IconButton>
-          <div style={{cursor: 'pointer'}} onClick={()=> history.push('/')}>
+          <div style={{cursor: 'pointer'}} onClick={()=> history.push('/main')}>
             <img className={classes.logoWidth} src={AvalitikaLogo} alt="Logo" />
           </div>
           {/* <Typography component="h5" variant="h6" color="inherit" noWrap className={classes.title}>
