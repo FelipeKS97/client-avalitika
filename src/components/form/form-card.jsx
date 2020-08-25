@@ -38,27 +38,27 @@ const useStyles = makeStyles({
 export default function FormCard({
   id,
   haveContent,
-  title, 
-  curriculum, 
-  period, 
+  title,
+  curriculum,
+  period,
   isLoading,
   isStudent,
   isError,
-  status, 
-  published_at, 
+  status,
+  published_at,
   published_until,
   setSnackbarStatus
 }) {
   const classes = useStyles()
   const actionProps = {
     id,
-    status, 
-    published_at, 
+    status,
+    published_at,
     published_until,
     isStudent,
     setSnackbarStatus
   }
-  
+
   return (
     <Card className={classes.root}>
       <CardContent>
@@ -73,8 +73,8 @@ export default function FormCard({
         </Typography>
       </CardContent>
       <CardActions>
-      {isLoading ? <Skeleton animation="wave" />  
-        : !isError && haveContent && <ActionButtons {...actionProps} /> 
+      {isLoading ? <Skeleton animation="wave" />
+        : !isError && haveContent && <ActionButtons {...actionProps} />
       }
       </CardActions>
     </Card>
@@ -87,27 +87,27 @@ function ActionButtons({ id, status, published_at, published_until, isStudent, s
   return (
     <>
       {!isStudent ?
-        <> 
-          <Button 
-            color="primary" 
-            variant="outlined" 
-            onClick={() => push(`${path}/${id}`)} 
+        <>
+          <Button
+            color="primary"
+            variant="outlined"
+            onClick={() => push(`${path}/${id}`)}
             size="small">
-              Visualizar
+              { published_at ? 'Visualizar' : 'Editar' }
           </Button>
-          <AlertPublish 
-            id={id} 
-            status={status} 
-            published_at={published_at} 
-            published_until={published_until} 
+          <AlertPublish
+            id={id}
+            status={status}
+            published_at={published_at}
+            published_until={published_until}
             setSnackbarStatus={setSnackbarStatus}
           />
         </>
       :
-        <Button 
-          color="primary" 
-          variant="outlined" 
-          onClick={() => push(`${path}/${id}`)} 
+        <Button
+          color="primary"
+          variant="outlined"
+          onClick={() => push(`${path}/${id}`)}
           size="small">
             Responder
         </Button>

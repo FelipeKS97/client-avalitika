@@ -1,5 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: './src/index.js',
@@ -68,6 +69,14 @@ module.exports = {
       },
     ]
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+        template: "./public/index.html",
+        favicon: "./public/images/favicon.ico",
+        filename: 'index.html',
+        inject: 'body'
+    })
+  ],
   devServer: {
     port: 8080,
     host: "localhost",
