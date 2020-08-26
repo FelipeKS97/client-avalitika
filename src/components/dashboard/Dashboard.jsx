@@ -117,7 +117,7 @@ export default function Dashboard() {
   const [summary, setSummary] = useState()
   const [period, setPeriod] = useState()
   const [course, setCourse] = useState()
-  const [snackbar, setSnackbarStatus] = useCustomSnackbar() 
+  const [snackbar, setSnackbarStatus] = useCustomSnackbar()
   const { get } = axios
 
   useEffect(() => {
@@ -133,7 +133,7 @@ export default function Dashboard() {
         setSummary(reqSummary.data)
       } catch (error) {
         setSnackbarStatus({
-          open: true, 
+          open: true,
           message: "Ocorreu um erro no carregamento."
         })
       } finally {
@@ -148,16 +148,16 @@ export default function Dashboard() {
     <MainContent title={ period && `Semestre Atual: ${period.description}` || 'Carregando...'}>
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={2}>
+          {/* Summary */}
+           <Grid item xs={12} md={6} lg={4}>
+            <Paper className={fixedHeightPaper}>
+              <Summary data={summary} />
+            </Paper>
+          </Grid>
           {/* Chart */}
           <Grid item xs={12} md={6} lg={8}>
             <Paper className={fixedHeightPaper}>
               <CustomLineChart data={summary && summary.months} />
-            </Paper>
-          </Grid>
-          {/* Summary */}
-          <Grid item xs={12} md={6} lg={4}>
-            <Paper className={fixedHeightPaper}>
-              <Summary data={summary} /> 
             </Paper>
           </Grid>
           {/* Recent Answers */}

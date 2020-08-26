@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useContext} from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -17,7 +17,7 @@ import AnswerFormContainer from './components/student/AnswerForm';
 import AnswersContainer from './components/answer/AnswersContainer';
 import AnswerContainer from './components/answer/AnswerContainer';
 import ReportContainer from './components/report/ReportContainer';
-import AuthProvider from './components/main/AuthProvider'
+import { AuthContext } from './components/main/AuthProvider'
 
 export default function RouteConfig() {
   // This is a temporary route configuration.
@@ -43,25 +43,26 @@ export default function RouteConfig() {
 }
 
 function CustomRoute({ component: Component, ...rest}) {
-  const [isAuthenticated, setAuth] = useState(false);
+  const [user, setUser] = useContext(AuthContext);
   const isPrivate = rest.private
 
   useEffect(() => {
     const fetchLogged = async () => {
       if(localStorage.getItem('auth_token')) {
-        setAuth(true)
+        setUser(true)
       } else {
-        setAuth(false)
+        setUser(false)
       }
     };
     fetchLogged();
-  }, []);
+    console.log(localStorage.getItem('auth_token'))
+  }, [user]);
   return (
     <Route
       {...rest}
-      render={props =>
+      render={props => // (<Component {...props}  />)
         // eslint-disable-next-line no-nested-ternary
-        isAuthenticated ? (
+        localStorage.getItem('auth_token') ? (
           <Component {...props} />
         ) : isPrivate ? (
           <Redirect
