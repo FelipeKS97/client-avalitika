@@ -28,7 +28,7 @@ export default function AnswerForm() {
   const [disciplineList, setDisciplineList] = useState([])
   const [professor, setProfessor] = useState(null)
   const [professorList, setProfessorList] = useState([])
-  const [snackbar, setSnackbarStatus] = useCustomSnackbar() 
+  const [snackbar, setSnackbarStatus] = useCustomSnackbar()
   const classes = useStyles();
   const randomNumber = Math.floor((Math.random() * 99809875) + 1);
   const { id } = useParams()
@@ -55,8 +55,8 @@ export default function AnswerForm() {
         const reqDisciplines = await get(`/student/disciplines?curriculum_id=${reqForm.data.curriculum_id}`)
         setDisciplineList(reqDisciplines.data)
       } catch (error) {
-        setSnackbarStatus({ 
-          open: true, 
+        setSnackbarStatus({
+          open: true,
           message: "Ocorreu um erro no carregamento."
         })
       }
@@ -109,14 +109,14 @@ export default function AnswerForm() {
       try {
         const req = await post('/student/formulary', obj)
         setSnackbarStatus({
-          open: true, 
+          open: true,
           message: "Resposta submetida com sucesso."
         })
         push(`${url}`)
       } catch (error) {
         const errMessage = error.response.data.message
-        setSnackbarStatus({ 
-          open: true, 
+        setSnackbarStatus({
+          open: true,
           message: errMessage || "Ocorreu um erro no envio, tente novamente mais tarde."
         })
       }
@@ -128,14 +128,14 @@ export default function AnswerForm() {
     const isSelected = !!(discipline && professor)
     const handleWarning = () => {
       // if(!isVerified) {
-      //   setSnackbarStatus({ 
-      //     open: true, 
+      //   setSnackbarStatus({
+      //     open: true,
       //     message: "Por favor, faça primeiro a verificação."
       //   })
       // } else if(!isSelected) {
       if(!isSelected) {
-      setSnackbarStatus({ 
-          open: true, 
+      setSnackbarStatus({
+          open: true,
           message: "Por favor, selecione a disciplina e o professor."
         })
       }
@@ -151,7 +151,7 @@ export default function AnswerForm() {
         read_only={!isSelected}
         onSubmit={(data) => sendAnswers(data)}
         hide_actions={false}
-        data={JSON.parse(json_format)} 
+        data={JSON.parse(json_format)}
       />
     </div>)
   }
@@ -169,15 +169,15 @@ export default function AnswerForm() {
               noOptionsText={"Vazio"}
               onChange={(e, val)=> setDiscipline(val)}
               renderInput={(params) => (
-              <TextField 
-                variant={'outlined'} 
-                {...params} 
-                size={'medium'} 
-                label="Disciplina" 
+              <TextField
+                variant={'outlined'}
+                {...params}
+                size={'medium'}
+                label="Disciplina"
                 margin="normal" />
               )}
             />
-          </Grid> 
+          </Grid>
           <Grid item xs={6} md={6} lg={6}>
             <Autocomplete
               {...defaultProfsProps}
@@ -189,34 +189,29 @@ export default function AnswerForm() {
             //  disabled={curriculumList && true}
               onChange={(e, val)=> setProfessor(val)}
               renderInput={(params) => (
-              <TextField 
-                variant={'outlined'} 
-                {...params} 
-                size={'large'} 
-                label="Professor" 
+              <TextField
+                variant={'outlined'}
+                {...params}
+                size={'large'}
+                label="Professor"
                 margin="normal"
                 value={professor}
               />
               )}
             />
           </Grid>
-          {/* <Grid item xs={2} md={2} lg={2}>
-          <Button variant="outlined" color={ isVerified ?  "primary" : "#4caf50"} onClick={handleClickOpen}>
-            { isVerified ? 'Verificado' : 'Verificar'}
-          </Button>
-          </Grid>     */}
         </Grid>
 
         <Grid container spacing={3} direction="row"
-             
+
         >
-          {form && 
-            <RenderForm 
-              discipline={discipline} 
-              professor={professor} 
-              {...form} 
-            />} 
-        </Grid>   
+          {form &&
+            <RenderForm
+              discipline={discipline}
+              professor={professor}
+              {...form}
+            />}
+        </Grid>
         { snackbar }
         <VerificationDialog {...verificationProps} />
       </Container>

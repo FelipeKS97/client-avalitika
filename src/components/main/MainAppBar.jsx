@@ -9,12 +9,13 @@ import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import AvalitikaLogo from '../../../public/images/avalitika_logo.svg'
 import SideDrawer from './SideDrawer'
+import LoginDialog from './LoginDialog'
 
 import { useStyles } from './mainStyles'
 import { useHistory } from "react-router-dom";
 
 
-export default function MainAppBar() {
+export default function MainAppBar(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -27,7 +28,8 @@ export default function MainAppBar() {
   const history = useHistory()
   const drawerProps = {
     open,
-    handleDrawerClose
+    handleDrawerClose,
+    ...props
   }
 
   return (
@@ -57,6 +59,7 @@ export default function MainAppBar() {
         </Toolbar>
     </AppBar>
 
+    <LoginDialog {...props} />
     <SideDrawer {...drawerProps} />
     </>
   );
