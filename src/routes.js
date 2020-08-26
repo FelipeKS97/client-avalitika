@@ -35,8 +35,8 @@ export default function RouteConfig() {
         <CustomRoute private path='/answer/:id' component={AnswerContainer} />
         <CustomRoute path='/student-form/:id' component={AnswerFormContainer} />
         <CustomRoute exact path='/student-form' component={StudentContainer} />
-        <Route exact path="*" component={NoMatch} />
         <Redirect from="/" to="/student-form" />
+        <Route exact path="*" component={NoMatch} />
       </Switch>
     </Router>
   );
