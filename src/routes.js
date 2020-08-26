@@ -1,12 +1,13 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  useLocation,
+  Redirect,
+  useLocation
 } from "react-router-dom";
 
-import Dashboard from './components/dashboard/Dashboard';
+import DashboardContainer from './components/dashboard/Dashboard';
 import MainContainer from './components/main/MainContainer';
 import ClassesContainer from './components/classes/ClassesContainer';
 import FormListContainer from './components/form/form-list';
@@ -16,42 +17,73 @@ import AnswerFormContainer from './components/student/AnswerForm';
 import AnswersContainer from './components/answer/AnswersContainer';
 import AnswerContainer from './components/answer/AnswerContainer';
 import ReportContainer from './components/report/ReportContainer';
+import AuthProvider from './components/main/AuthProvider'
 
 export default function RouteConfig() {
   // This is a temporary route configuration.
 
   return (
     <Router>
-      <Route exact path='/' component={StudentContainer} />
-      <Route exact path='/main' component={MainContainer} />
-      <Route exact path='/dashboard' component={Dashboard} />
-      <Route exact path='/classes' component={ClassesContainer} />
       <Switch>
-        <Route path='/forms/:id' component={FormContainer} />
-        <Route exact path='/forms' component={FormListContainer} />
+        <CustomRoute private exact path='/main' component={MainContainer} />
+        <CustomRoute private exact path='/dashboard' component={DashboardContainer} />
+        <CustomRoute private exact path='/classes' component={ClassesContainer} />
+        <CustomRoute private path='/forms/:id' component={FormContainer} />
+        <CustomRoute private  exact path='/forms' component={FormListContainer} />
+        <CustomRoute private path='/answers/:id/report' component={ReportContainer} />
+        <CustomRoute private path='/answers/:id' component={AnswersContainer} />
+        <CustomRoute private path='/answer/:id' component={AnswerContainer} />
+        <CustomRoute path='/student-form/:id' component={AnswerFormContainer} />
+        <CustomRoute exact path='/student-form' component={StudentContainer} />
+        <Route exact path="*" component={NoMatch} />
+        <Redirect from="/" to="/student-form" />
       </Switch>
-      <Switch>
-        <Route path='/student-form/:id' component={AnswerFormContainer} />
-        <Route exact path='/student-form' component={StudentContainer} />
-      </Switch>
-      <Switch>
-        <Route path='/answers/:id/report' component={ReportContainer} />
-        <Route path='/answers/:id' component={AnswersContainer} />
-      </Switch>
-      <Route path='/answer/:id' component={AnswerContainer} />
-      {/* <Route exact path="*" component={NoMatch} /> */}
-      {/* <Redirect from="*" to="/forms" /> */}
     </Router>
   );
+}
+
+function CustomRoute({ component: Component, ...rest}) {
+  const [isAuthenticated, setAuth] = useState(false);
+  const isPrivate = rest.private
+
+  useEffect(() => {
+    const fetchLogged = async () => {
+      if(localStorage.getItem('auth_token')) {
+        setAuth(true)
+      } else {
+        setAuth(false)
+      }
+    };
+    fetchLogged();
+  }, []);
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        // eslint-disable-next-line no-nested-ternary
+        isAuthenticated ? (
+          <Component {...props} />
+        ) : isPrivate ? (
+          <Redirect
+            to={{
+              pathname: '/student-form',
+            }}
+          />
+        ) : (
+          <Component {...props}  />
+        )
+      }
+    />
+  )
 }
 
 function NoMatch() {
   let location = useLocation()
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center'}}>
-      <h3>
-        A página <code>{location.pathname}</code> não foi encontrado.
+    <div style={{ display: 'flex', justifyContent: 'center', margin: 'auto', width:'100%', height: '100%'}}>
+      <h3 style={{  margin: 'auto' }}>
+        A página <code>{location.pathname}</code> não foi encontrada.
       </h3>
     </div>
   );

@@ -25,9 +25,7 @@ export default function SideDrawer({
 }) {
   const classes = useStyles();
   const { push } = useHistory();
-  const { pathname } = useLocation();
   const [user, setUser] = useContext(AuthContext);
-  //   const [isLoggedIn, setIsLoggedIn] = useState(true)
 
   const gridData = [
     {
@@ -47,16 +45,17 @@ export default function SideDrawer({
     },
   ];
 
-  // let isLoggedOut = pathname.includes('/student-form')
+  const authToken = localStorage.getItem("auth_token");
 
   const handleLogout = () => {
     setUser(false);
-    push("/");
+    localStorage.removeItem("auth_token");
+    push("/student-form");
   };
 
   const handleLogin = () => {
-    setOpenModalLogin(true)
-  }
+    setOpenModalLogin(true);
+  };
 
   return (
     <Drawer

@@ -17,12 +17,13 @@ const fixed_logins = [
   {
     username: "teste@teste.com",
     password: "12",
-  }
+  },
 ];
 
-export default function LoginDialog({ openModalLogin, setOpenModalLogin }) {
+export default function LoginDialog(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { openModalLogin, setOpenModalLogin, setAuth } = props;
   const { push } = useHistory();
   const [user, setUser] = useContext(AuthContext);
 
@@ -33,23 +34,25 @@ export default function LoginDialog({ openModalLogin, setOpenModalLogin }) {
     );
 
     if (hasLogin) {
-      setUser(true)
-      setOpenModalLogin(false)
-      push('/dashboard')
+      const exampleToken = new Date().getTime();
+      setUser(true);
+      localStorage.setItem("auth_token", exampleToken);
+      setOpenModalLogin(false);
+      push("/dashboard");
     }
   };
 
   return (
     <>
       <Dialog open={openModalLogin} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Verificação</DialogTitle>
+        <DialogTitle id="form-dialog-title">Entrar</DialogTitle>
         <DialogContent>
           <DialogContentText>Realize seu login abaixo.</DialogContentText>
           <TextField
             autoFocus
             margin="dense"
             variant={"outlined"}
-            id="login-dialog"
+            id="login-dialog-username"
             size={"medium"}
             label="Email"
             value={username}
@@ -60,7 +63,7 @@ export default function LoginDialog({ openModalLogin, setOpenModalLogin }) {
           <TextField
             margin="dense"
             variant={"outlined"}
-            id="login-dialog"
+            id="login-dialog-password"
             size={"medium"}
             label="Senha"
             type="password"
@@ -73,7 +76,11 @@ export default function LoginDialog({ openModalLogin, setOpenModalLogin }) {
           <Button onClick={() => setOpenModalLogin(false)} color="primary">
             Cancelar
           </Button>
-          <Button onClick={handleLogin} variant="contained" color="primary">
+          <Button
+            onClick={() => handleLogin()}
+            variant="contained"
+            color="primary"
+          >
             Entrar
           </Button>
         </DialogActions>
