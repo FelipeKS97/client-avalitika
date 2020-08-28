@@ -41,6 +41,10 @@ export default function ClassesContainer() {
       }
     }
     fetchData()
+    setSnackbarStatus({
+      open: true,
+      message: "Por favor, selecione a grade curricular e o período.",
+    });
   },[])
 
   const defaultProps = {

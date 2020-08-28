@@ -20,12 +20,12 @@ const fixed_logins = [
   },
 ];
 
-export default function LoginDialog(props) {
+export default function LoginDialog({ openModalLogin, setOpenModalLogin,  }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { openModalLogin, setOpenModalLogin, setAuth } = props;
   const { push } = useHistory();
   const [user, setUser] = useContext(AuthContext);
+  const [error, setError] = useState(false);
 
   const handleLogin = () => {
     // As here is just an example, we have some fixed credentials.
@@ -33,14 +33,26 @@ export default function LoginDialog(props) {
       (fixed) => fixed.username === username && fixed.password === password
     );
 
-    if (hasLogin) {
+    if(hasLogin) {
+      setError(false)
       const exampleToken = new Date().getTime();
       setUser(true);
       localStorage.setItem("auth_token", exampleToken);
       setOpenModalLogin(false);
       push("/dashboard");
+    } else {
+      setError(true)
     }
   };
+
+  const handleCancel = () => {
+    if(error) {
+      setError(false)
+    }
+    setUsername("")
+    setPassword("")
+    setOpenModalLogin(false)
+  }
 
   return (
     <>
@@ -50,6 +62,8 @@ export default function LoginDialog(props) {
           <DialogContentText>Realize seu login abaixo.</DialogContentText>
           <TextField
             autoFocus
+            error={error}
+            helperText={error && "Credenciais incorretas."}
             margin="dense"
             variant={"outlined"}
             id="login-dialog-username"
@@ -61,6 +75,8 @@ export default function LoginDialog(props) {
           />
 
           <TextField
+            error={error}
+            helperText={error && "Credenciais incorretas."}
             margin="dense"
             variant={"outlined"}
             id="login-dialog-password"
@@ -73,12 +89,13 @@ export default function LoginDialog(props) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenModalLogin(false)} color="primary">
+          <Button onClick={() => handleCancel()} color="primary">
             Cancelar
           </Button>
           <Button
             onClick={() => handleLogin()}
             variant="contained"
+            type="submit"
             color="primary"
           >
             Entrar

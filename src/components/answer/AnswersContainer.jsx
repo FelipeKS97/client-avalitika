@@ -9,10 +9,10 @@ import { useParams, useHistory, useRouteMatch } from "react-router-dom";
 
 import MainContent from '../main/MainContent';
 import useCustomSnackbar from '../../hooks/CustomSnackbar';
-import { 
-  tableIcons, 
-  columnArrayAnswers, 
-  localizationAnswers 
+import {
+  tableIcons,
+  columnArrayAnswers,
+  localizationAnswers
 } from '../../../config/table-config';
 import { axiosInstance as axios } from '../../../config/axios';
 import { convertToColumns } from '../../utils/convert';
@@ -25,12 +25,12 @@ export default function AnswersContainer() {
   const [answersList, setAnswersList] = useState([])
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [snackbar, setSnackbarStatus] = useCustomSnackbar() 
+  const [snackbar, setSnackbarStatus] = useCustomSnackbar()
   const { id } = useParams()
   const { url } = useRouteMatch()
   const { push } = useHistory()
   const { get } = axios
-  
+
   useEffect(() => {
     const fetchData = async () => {
       setIsError(false);
@@ -38,11 +38,11 @@ export default function AnswersContainer() {
       try {
         const reqAnswers = await get(`/coord/formulary/${id}/answers`)
         let answerColumns = convertToColumns(reqAnswers.data)
-        setAnswersList(answerColumns)    
+        setAnswersList(answerColumns)
       } catch (error) {
         setIsError(true);
-        setSnackbarStatus({ 
-          open: true, 
+        setSnackbarStatus({
+          open: true,
           message: "Ocorreu um erro no carregamento."
         })
       } finally {
@@ -52,7 +52,7 @@ export default function AnswersContainer() {
     id && fetchData()
   },[id])
 
-  const haveContent = answersList.length > 0 
+  const haveContent = answersList.length > 0
 
   return (
     <MainContent title={'Respostas'}>
@@ -62,10 +62,10 @@ export default function AnswersContainer() {
           alignItems="center"
         >
           <div className={classes.actionContainer}>
-            <Button 
-              color="primary" 
-              variant="outlined" 
-              onClick={() => push(`${url}/report`)} 
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() => push(`${url}/report`)}
               size="small"
               startIcon={<BarChartIcon />}
             >

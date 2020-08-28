@@ -27,7 +27,7 @@ export default function Main(props) {
         <div className={classes.appBarSpacer} />
         <Typography
           className={classes.mainTitle}
-          variant="h4"
+          variant={window.outerWidth > 762 ?  "h4" : "h5"}
           component="h5"
           >
           {props.title}

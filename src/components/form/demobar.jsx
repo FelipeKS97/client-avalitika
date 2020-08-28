@@ -37,7 +37,7 @@ export default class Demobar extends React.Component {
     store.subscribe(state => update(state.data));
 
   }
-  
+
 
   showPreview() {
     this.setState({
@@ -89,22 +89,22 @@ export default class Demobar extends React.Component {
     const { formData } = this.props
 
     return (
-      <div className="clearfix" style={{ margin: '10px', width: '70%' }}>
+      <div className="clearfix" style={{ padding: '1rem 1rem 1rem 3rem', width: '70%', display: 'flex', justifyContent: 'flex-end'}}>
         {/* <h4 className="pull-left">{store.state.title}</h4> */}
-        <Button 
-          variant="outlined" 
-          color="primary" 
-          className="pull-right" 
-          style={{ marginRight: '5px' }} 
+        <Button
+          variant="outlined"
+          color="primary"
+          className="pull-right"
+          style={{ marginRight: '5px' }}
           onClick={this.showRoPreview.bind(this)}
         > Visualizar Formulário
         </Button>
 
         {
           formData && !formData.published_at &&
-          <EditFormHeader 
-            setIsUpdate={this.props.setIsUpdate} 
-            formData={this.props.formData} 
+          <EditFormHeader
+            setIsUpdate={this.props.setIsUpdate}
+            formData={this.props.formData}
           />
         }
         { roPreviewVisible &&
