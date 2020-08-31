@@ -93,10 +93,13 @@ export const useStyles = makeStyles((theme) => ({
     paperIcon: {
       width: '23px'
     },
+    backdrop: {
+      zIndex: theme.zIndex.drawer + 1,
+      color: '#fff',
+    },
     mainTitle: {
       padding: '1.5rem',
       marginLeft: '1.5vw',
       color: 'gray'
     }
 }));
-  

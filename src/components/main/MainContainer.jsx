@@ -73,12 +73,12 @@ export default function MainContainer({ history }) {
     }
 
   return (
-    <MainContent title={period && `Semestre Atual: ${period}`}>
+    <MainContent title={period && `Semestre Atual: ${period}`} isLoading={isLoading}>
         <Container maxWidth="lg" className={classes.container}>
             <Grid container spacing={3} direction="row"
                 justify="center"
                 alignItems="center">
-                { renderGrid(gridData, history) }  
+                { renderGrid(gridData, history) }
             </Grid>
         </Container>
     </MainContent>

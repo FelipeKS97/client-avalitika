@@ -10,7 +10,7 @@ import ReactFormGenerator from './form';
 import SortableFormElements from './sortable-form-elements';
 import Button from '@material-ui/core/Button';
 import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
-import Skeleton from '@material-ui/lab/Skeleton';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const { PlaceHolder } = SortableFormElements;
 const answers = {}
@@ -141,21 +141,21 @@ export default class Preview extends React.Component {
 
   getElement(item, index) {
     const SortableFormElement = SortableFormElements[item.element];
-    return ( 
-      <SortableFormElement 
-        id={item.id} 
-        seq={this.seq} 
-        index={index} 
-        moveCard={this.moveCard} 
-        insertCard={this.insertCard} 
+    return (
+      <SortableFormElement
+        id={item.id}
+        seq={this.seq}
+        index={index}
+        moveCard={this.moveCard}
+        insertCard={this.insertCard}
         mutable={false}
-        parent={this.props.parent} 
-        editModeOn={this.props.editModeOn} 
-        isDraggable={true} 
-        key={item.id} 
-        sortData={item.id} 
-        data={item} 
-        _onDestroy={this._onDestroy} 
+        parent={this.props.parent}
+        editModeOn={this.props.editModeOn}
+        isDraggable={true}
+        key={item.id}
+        sortData={item.id}
+        data={item}
+        _onDestroy={this._onDestroy}
       />
     );
   }
@@ -182,7 +182,7 @@ export default class Preview extends React.Component {
         data={this.state.data} />
     </div>)
   }
-  
+
 
   render() {
     const { formId } = this.props
@@ -199,30 +199,33 @@ export default class Preview extends React.Component {
       <div style={{marginLeft: '3rem'}} className={classes}>
         <div className="edit-form" ref={this.editForm}>
           { this.props.editElement !== null &&
-            <FormElementsEdit 
-              showCorrectColumn={this.props.showCorrectColumn} 
-              files={this.props.files} 
-              manualEditModeOff={this.manualEditModeOff} 
-              preview={this} 
-              element={this.props.editElement} 
-              updateElement={this.updateElement} 
+            <FormElementsEdit
+              showCorrectColumn={this.props.showCorrectColumn}
+              files={this.props.files}
+              manualEditModeOff={this.manualEditModeOff}
+              preview={this}
+              element={this.props.editElement}
+              updateElement={this.updateElement}
             />
           }
         </div>
         <div className="Sortable">{items}</div>
-          { this.state.isLoading ? 
-              <Skeleton /> :
-              <PlaceHolder 
-              id="form-place-holder" 
-              show={items.length === 0} 
-              index={items.length} 
-              moveCard={this.cardPlaceHolder} 
+          { this.state.isLoading ?
+            <div style={{display: 'flex', justifyContent: 'center'}}>
+              <CircularProgress color="inherit" />
+            </div>
+            :
+              <PlaceHolder
+              id="form-place-holder"
+              show={items.length === 0}
+              index={items.length}
+              moveCard={this.cardPlaceHolder}
               insertCard={this.insertCard}
               />
           }
         <div>
-          {formId && 
-            <Button size="large" variant="contained" color="primary" className="pull-right" 
+          {formId &&
+            <Button size="large" variant="contained" color="primary" className="pull-right"
               style={{ marginRight: '10px' }}
               onClick={() => store.dispatch('saveForm', { json_format: data, id: parseInt(formId) })}
               startIcon={<SaveOutlinedIcon />}
@@ -231,7 +234,7 @@ export default class Preview extends React.Component {
             </Button>
           }
         </div>
-        
+
       </div>
       }
       </>

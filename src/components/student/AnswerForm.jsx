@@ -157,7 +157,7 @@ export default function AnswerForm() {
   }
 
   return (
-    <MainContent title={form && form.title}>
+    <MainContent title={form && form.title} isLoading={isLoading}>
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3} direction="row">
           <Grid item xs={6} md={6} lg={6}>

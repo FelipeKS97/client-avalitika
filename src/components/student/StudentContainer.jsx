@@ -107,7 +107,7 @@ export default function FormListContainer() {
   };
 
   return (
-    <MainContent title={"Formulários Publicados"}>
+    <MainContent title={"Formulários Publicados"} isLoading={isLoading}>
       <Container maxWidth="lg" className={classes.container}>
         <Grid
           container

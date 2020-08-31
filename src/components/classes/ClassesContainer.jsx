@@ -57,7 +57,7 @@ export default function ClassesContainer() {
   };
 
   return (
-    <MainContent title={'Turmas'}>
+    <MainContent title={'Turmas'} isLoading={isLoading}>
       <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3} direction="row">
               <Grid item xs={6} md={6} lg={6}>
@@ -100,15 +100,3 @@ export default function ClassesContainer() {
     </MainContent>
   );
 }
-
-const periods = [
-  {title: '2020.1', year: 2020 },
-  {title: '2020.2', year: 2020 },
-  {title: '2021.1', year: 2021 },
-  {title: '2021.1', year: 2021 }
-]
-
-const curricula = [
-  { title: 'BSI-2012', year: 2012 },
-  { title: 'BSI-2018', year: 2018 },
-];

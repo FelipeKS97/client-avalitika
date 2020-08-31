@@ -37,8 +37,8 @@ export default function AnswerContainer() {
         setFormAnswer(reqAnswer.data)
       } catch (error) {
         setIsError(true);
-        setSnackbarStatus({ 
-          open: true, 
+        setSnackbarStatus({
+          open: true,
           message: "Ocorreu um erro no carregamento."
         })
       } finally {
@@ -68,7 +68,7 @@ export default function AnswerContainer() {
   }
 
   return (
-    <MainContent title={formAnswer && formAnswer.formulary.title || ''}>
+    <MainContent title={formAnswer && formAnswer.formulary.title || ''} isLoading={isLoading}>
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3} direction="row"
             justify="left"
@@ -78,34 +78,34 @@ export default function AnswerContainer() {
               <FormControl style={{width:'100%'}}>
                 <TextField
                   disabled
-                  required id="standard-required" 
-                  label={ formAnswer && formAnswer.class.professor.user.fullname || "" } 
+                  required id="standard-required"
+                  label={ formAnswer && formAnswer.class.professor.user.fullname || "" }
                   defaultValue={ formAnswer && formAnswer.class.professor.user.fullname || "" }
                   InputProps={{
                     readOnly: true,
                   }}
                 />
-              </FormControl>       
-            </Grid> 
+              </FormControl>
+            </Grid>
             <Grid item xs={3} md={3} lg={6}>
               <FormControl style={{width:'100%'}}>
                   <TextField
                     disabled
-                    required id="standard-required" 
-                    label={ formAnswer && formAnswer.class.discipline.name || "" } 
+                    required id="standard-required"
+                    label={ formAnswer && formAnswer.class.discipline.name || "" }
                     defaultValue={ formAnswer && formAnswer.class.discipline.name || "" }
                     InputProps={{
                       readOnly: true,
-                    }} 
+                    }}
                   />
                 </FormControl>
-            </Grid>         
+            </Grid>
         </Grid>
 
         <Grid container spacing={3} direction="row"
-             
+
         >
-            {formAnswer && <RenderForm {...formAnswer} />} 
+            {formAnswer && <RenderForm {...formAnswer} />}
         </Grid>
         {snackbar}
       </Container>

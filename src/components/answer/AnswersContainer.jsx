@@ -55,7 +55,7 @@ export default function AnswersContainer() {
   const haveContent = answersList.length > 0
 
   return (
-    <MainContent title={'Respostas'}>
+    <MainContent title={'Respostas'} isLoading={isLoading}>
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3} direction="row"
           justify="left"

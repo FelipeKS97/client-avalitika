@@ -3,6 +3,8 @@ import clsx from 'clsx';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Skeleton from '@material-ui/lab/Skeleton';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { useStyles } from './mainStyles'
 import MainAppBar from './MainAppBar'
@@ -24,6 +26,7 @@ export default function Main(props) {
       <MainAppBar {...props} {...loginProps} />
 
       <main className={classes.content}>
+
         <div className={classes.appBarSpacer} />
         <Typography
           className={classes.mainTitle}
@@ -32,6 +35,9 @@ export default function Main(props) {
           >
           {props.title}
         </Typography>
+        <Backdrop className={classes.backdrop} open={props.isLoading}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
         {props.children}
       </main>
     </div>

@@ -24,10 +24,10 @@ export default function RenderTable(props) {
       try {
         const reqProfs = await get(`/coord/professors`)
         setProfessorsList(reqProfs.data)
-        
+
       } catch (error) {
-        setSnackbarStatus({ 
-          open: true, 
+        setSnackbarStatus({
+          open: true,
           message: "Ocorreu um erro no carregamento."
         })
       }
@@ -44,8 +44,8 @@ export default function RenderTable(props) {
         setDisciplineList(reqDisciplines.data)
       } catch (error) {
         setIsError(true);
-        setSnackbarStatus({ 
-          open: true, 
+        setSnackbarStatus({
+          open: true,
           message: "Ocorreu um erro no carregamento das disciplinas."
         })
       } finally {
@@ -60,18 +60,18 @@ export default function RenderTable(props) {
       setIsError(false);
       setIsLoading(true);
       try {
-        const disc_array = convertObjId(disciplineList) 
-        const reqClasses = await get('/coord/classes', { 
-          params: { 
-            period_id: period.id, 
+        const disc_array = convertObjId(disciplineList)
+        const reqClasses = await get('/coord/classes', {
+          params: {
+            period_id: period.id,
             disc_array
           }
         })
         setClassList(reqClasses.data)
       } catch (error) {
         setIsError(true);
-        setSnackbarStatus({ 
-          open: true, 
+        setSnackbarStatus({
+          open: true,
           message: "Ocorreu um erro no carregamento das turmas."
         })
       } finally {
@@ -91,47 +91,47 @@ export default function RenderTable(props) {
     }
     try {
       const reqClasses = await post(`/coord/classes`, obj)
-      setSnackbarStatus({ 
-        open: true, 
+      setSnackbarStatus({
+        open: true,
         message: "Turmas salvas com sucesso."
-      })     
+      })
     } catch (error) {
-      setSnackbarStatus({ 
-        open: true, 
+      setSnackbarStatus({
+        open: true,
         message: "Ocorreu um erro no salvamento. Tente novamente mais tarde."
       })
     }
   }
   const columnClasses = [
-    { 
-      title: 'Professores', 
-      field: 'id', 
-      render: rowData => 
-        <ProfSelector 
-          {...props} 
+    {
+      title: 'Professores',
+      field: 'id',
+      render: rowData =>
+        <ProfSelector
+          {...props}
           classes={classList}
           newClassList={newClassList}
-          setNewClassList={setNewClassList} 
-          profsList={period && professorsList} 
+          setNewClassList={setNewClassList}
+          profsList={period && professorsList}
           rowData={rowData}
-        /> 
+        />
     },
-    { 
-      title: 'Disciplina', 
-      field: 'name' 
+    {
+      title: 'Disciplina',
+      field: 'name'
     },
-    { 
-      title: 'Sigla', 
-      field: 'slug' 
+    {
+      title: 'Sigla',
+      field: 'slug'
     }
   ];
 
   return (
     <>
       <div style={{width: '100%', display: 'flex', justifyContent: 'flex-end', padding: '1.2rem'}}>
-        <Button 
-          onClick={() => handleSave(newClassList, period)} 
-          variant="contained" 
+        <Button
+          onClick={() => handleSave(newClassList, period)}
+          variant="contained"
           color="primary"
           startIcon={<SaveOutlinedIcon />}
         >
@@ -145,9 +145,10 @@ export default function RenderTable(props) {
         data={disciplineList}
         icons={tableIcons}
         options={{
-          showTitle: true, 
+          showTitle: true,
         }}
         localization={localizationClasses}
+        isLoading={isLoading}
       />
     </>
   )

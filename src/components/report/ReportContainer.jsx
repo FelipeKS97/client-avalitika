@@ -24,7 +24,7 @@ export default function AnswerForm() {
   const [professor, setProfessor] = useState(null)
   const [professorList, setProfessorList] = useState([])
   const [answers, setAnswers] = useState([])
-  const [snackbar, setSnackbarStatus] = useCustomSnackbar() 
+  const [snackbar, setSnackbarStatus] = useCustomSnackbar()
   const classes = useStyles();
   const { id } = useParams()
   const { push } = useHistory()
@@ -43,8 +43,8 @@ export default function AnswerForm() {
         const reqAnswers = await get(`/coord/formulary/${id}/answers`)
         setAnswers(reqAnswers.data)
       } catch (error) {
-        setSnackbarStatus({ 
-          open: true, 
+        setSnackbarStatus({
+          open: true,
           message: "Ocorreu um erro no carregamento."
         })
       }
@@ -84,7 +84,7 @@ export default function AnswerForm() {
   };
 
   return (
-    <MainContent title={'Relatório'}>
+    <MainContent title={'Relatório'} isLoading={isLoading}>
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3} direction="row"
           justify="left"
@@ -99,15 +99,15 @@ export default function AnswerForm() {
               noOptionsText={"Vazio"}
               onChange={(e, val)=> setDiscipline(val)}
               renderInput={(params) => (
-              <TextField 
-                variant={'outlined'} 
-                {...params} 
-                size={'medium'} 
-                label="Disciplina" 
+              <TextField
+                variant={'outlined'}
+                {...params}
+                size={'medium'}
+                label="Disciplina"
                 margin="normal" />
               )}
             />
-          </Grid> 
+          </Grid>
           <Grid item xs={6} md={6} lg={6}>
             <Autocomplete
               {...defaultProfsProps}
@@ -119,26 +119,26 @@ export default function AnswerForm() {
             //  disabled={curriculumList && true}
               onChange={(e, val)=> setProfessor(val)}
               renderInput={(params) => (
-              <TextField 
-                variant={'outlined'} 
-                {...params} 
-                size={'medium'} 
-                label="Professor" 
+              <TextField
+                variant={'outlined'}
+                {...params}
+                size={'medium'}
+                label="Professor"
                 margin="normal"
                 value={professor}
               />
-              )} 
+              )}
             />
-          </Grid>     
+          </Grid>
         </Grid>
 
         {/* <Button id="print-button" onClick={() => printPDF() }>GERAR PDF</Button> */}
 
         <Grid id="test-site" container spacing={3} direction="row"
-             
+
         >
           {ReportItem({form, answers, discipline, professor})}
-        </Grid>   
+        </Grid>
         { snackbar }
       </Container>
     </MainContent>

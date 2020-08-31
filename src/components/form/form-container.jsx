@@ -15,24 +15,30 @@ export default function FormContainer() {
   const { push } = useHistory();
   const { title } = store.state;
   const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
   const [form, setForm] = useState();
   const { get } = axios;
 
-  const fetchData = async () => {
-    setIsError(false);
-    try {
-      const reqForm = await get(`/coord/formulary/${id}`);
-      setForm(reqForm.data);
-    } catch (error) {
-      if (error.response.status === 404) {
-        push("/forms");
-      }
-      setIsError(true);
-    }
-  };
 
   useEffect(() => {
+    const fetchData = async () => {
+      setIsError(false);
+      setIsLoading(true);
+      try {
+        const reqForm = await get(`/coord/formulary/${id}`);
+        setForm(reqForm.data);
+        setIsError(false)
+      } catch (error) {
+        if (error.response.status === 404) {
+          push("/forms");
+        }
+        setIsError(true);
+      } finally {
+        setIsLoading(false)
+      }
+    };
+
     fetchData();
   }, []);
 
@@ -45,7 +51,7 @@ export default function FormContainer() {
 
   return (
     <>
-      <MainContent title={form && form.title}>
+      <MainContent title={form && form.title} isLoading={isLoading}>
         {form && (
           <div
             style={{

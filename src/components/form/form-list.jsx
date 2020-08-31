@@ -9,7 +9,6 @@ import FormCard from './form-card'
 import EditFormHeader from './form-header'
 import { axiosInstance as axios } from '../../../config/axios'
 import useCustomSnackbar from '../../hooks/CustomSnackbar'
-import PaginationContainer from '../pagination/pagination'
 
 export default function FormListContainer() {
   const [isLoading, setIsLoading] = useState(false);
@@ -27,13 +26,13 @@ export default function FormListContainer() {
       setIsLoading(true);
       try {
         const reqInfo = await get('/coord/info')
-        setCourse(reqInfo.data[1].course_id)  
+        setCourse(reqInfo.data[1].course_id)
         const reqForms = await get('/coord/formulary')
-        setFormList(reqForms.data)  
+        setFormList(reqForms.data)
       } catch (error) {
         setIsError(true);
-        setSnackbarStatus({ 
-          open: true, 
+        setSnackbarStatus({
+          open: true,
           message: "Ocorreu um erro no carregamento.",
           // action: setIsUpdate
         })
@@ -60,8 +59,8 @@ export default function FormListContainer() {
           {haveContent ?
             filteredForms.map((el, i) => (
               <Grid key={i} item xs={12} md={4} lg={3}>
-                <FormCard 
-                  setSnackbarStatus={setSnackbarStatus} 
+                <FormCard
+                  setSnackbarStatus={setSnackbarStatus}
                   isError={isError}
                   isLoading={isLoading}
                   haveContent={haveContent}
@@ -70,11 +69,11 @@ export default function FormListContainer() {
               </Grid>
             ))
             :
-            <> 
+            <>
             {!isError && isLoading ? Array.from({ length: 8 }, (x, i) => (
                 <Grid key={i} item xs={12} md={4} lg={3}>
-                  <FormCard 
-                    isError={isError} 
+                  <FormCard
+                    isError={isError}
                     isLoading={isLoading}
                     haveContent={haveContent}
                   />
@@ -86,7 +85,6 @@ export default function FormListContainer() {
           </Grid>
           <EditFormHeader setSnackbarStatus={setSnackbarStatus} isCreate/>
           {snackbar}
-          {/* <PaginationContainer /> */}
       </Container>
     </MainContent>
   )
