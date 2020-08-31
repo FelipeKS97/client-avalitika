@@ -107,6 +107,8 @@ export default function AnswerForm() {
       }
 
       try {
+        setIsLoading(true)
+        setIsError(false)
         const req = await post('/student/formulary', obj)
         setSnackbarStatus({
           open: true,
@@ -114,11 +116,14 @@ export default function AnswerForm() {
         })
         push(`${url}`)
       } catch (error) {
+        setIsError(true)
         const errMessage = error.response.data.message
         setSnackbarStatus({
           open: true,
           message: errMessage || "Ocorreu um erro no envio, tente novamente mais tarde."
         })
+      } finally {
+        setIsLoading(false)
       }
     }
   }

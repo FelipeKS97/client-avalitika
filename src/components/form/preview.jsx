@@ -11,22 +11,20 @@ import SortableFormElements from './sortable-form-elements';
 import Button from '@material-ui/core/Button';
 import SaveOutlinedIcon from '@material-ui/icons/SaveOutlined';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import FormNotifications from './form-notifications'
 
 const { PlaceHolder } = SortableFormElements;
 const answers = {}
 
-export default class Preview extends React.Component {
+export default class Preview extends Component {
   constructor(props) {
     super(props);
-
-    //const { onLoad, onPost } = props;
-    //store.setExternalHandler(onLoad, onPost);
-
     this.editForm = React.createRef();
     this.state = {
       data: [],
       answer_data: {},
-      isLoading: false
+      isLoading: false,
+      isLoadingSave: false
     };
     this.seq = 0;
 
@@ -160,8 +158,8 @@ export default class Preview extends React.Component {
     );
   }
 
-  handleSave(data, id) {
-    if(id) store.dispatch('saveForm', { json_format: data, id })
+  handleSave = async (data, formId) => {
+    await store.dispatch('saveForm', { json_format: data, id: parseInt(formId) })
   }
 
   renderNoEdit(published_at) {
@@ -186,7 +184,7 @@ export default class Preview extends React.Component {
 
   render() {
     const { formId } = this.props
-    const { published_at } = store.state
+    const { published_at, notification, is_loading_save } = store.state
     let classes = this.props.className;
     if (this.props.editMode) { classes += ' is-editing'; }
     const data = Array.isArray(this.state.data) && this.state.data.filter(x => !!x);
@@ -227,14 +225,14 @@ export default class Preview extends React.Component {
           {formId &&
             <Button size="large" variant="contained" color="primary" className="pull-right"
               style={{ marginRight: '10px' }}
-              onClick={() => store.dispatch('saveForm', { json_format: data, id: parseInt(formId) })}
+              onClick={() => this.handleSave(data, formId)}
               startIcon={<SaveOutlinedIcon />}
             >
-            Salvar
+            { is_loading_save ? <CircularProgress color="inherit" /> : 'Salvar'}
             </Button>
           }
         </div>
-
+        <FormNotifications notification={notification} />
       </div>
       }
       </>

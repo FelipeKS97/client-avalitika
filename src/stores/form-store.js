@@ -2,7 +2,6 @@ import Store from 'beedle';
 import { get, post, put } from 'axios';
 import { BASE_URL } from '../../config/axios'
 
-let _saveUrl;
 
 const formStore = new Store({
   actions: {
@@ -17,7 +16,7 @@ const formStore = new Store({
           req.data.json_format = JSON.parse(req.data.json_format)
           this.setData(context, req.data)
         } catch (error) {
-          // console.log(error)
+          this.setData(context, { notification: 'Ocorreu um erro no carregamento.' })
         }
       }
     },
@@ -41,31 +40,51 @@ const formStore = new Store({
     async save(context, data) {
       let { curriculum, title, id } = context.state
       let { json_format } = data
+      this.setData(context, { is_loading_save: true })
 
       let obj = {
         is_general_form: false,
-        curriculum_id: curriculum.id, 
-        title, 
-        json_format 
+        curriculum_id: curriculum.id,
+        title,
+        json_format
       }
       try {
         const request = await put(`${BASE_URL}/coord/formulary/${id}`, obj);
+        this.setData(context, { notification: 'Salvo com sucesso.' })
       } catch (error) {
+        this.setData(context, { notification: 'Ocorreu um erro no salvamento.' })
+      } finally {
+        this.setData(context, { is_loading_save: false })
       }
     },
   },
 
   mutations: {
     setData(state, payload) {
-      const {json_format, curriculum, published_at, title, status, id } = payload
-      // eslint-disable-next-line no-param-reassign
-      if(json_format) state.data = json_format 
+      const {
+        json_format,
+        curriculum,
+        published_at,
+        title,
+        status,
+        id,
+        notification,
+        is_loading_save
+      } = payload
+
+      if(json_format) state.data = json_format
       if(id) state.id = id
       if(curriculum) state.curriculum = curriculum
       if(title) state.title = title
+      if(is_loading_save) {
+        state.is_loading_save = is_loading_save
+      } else { state.is_loading_save = false }
       if(status) {
         state.status = status
       } else { state.status = false }
+      if(notification) {
+        state.notification = notification
+      } else { state.notification = '' }
       if(published_at) {
         state.published_at = published_at
       } else { state.published_at = '' }
@@ -79,13 +98,10 @@ const formStore = new Store({
     title: '',
     status: false,
     id: null,
-    published_at: ''
+    published_at: '',
+    notification: '',
+    is_loading_save: false
   },
 });
-
-// formStore.setExternalHandler = (onLoad, onPost) => {
-//   _onLoad = onLoad;
-//   _onPost = onPost;
-// };
 
 export default formStore;
