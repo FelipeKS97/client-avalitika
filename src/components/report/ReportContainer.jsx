@@ -33,6 +33,8 @@ export default function AnswerForm() {
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsError(false);
+      setIsLoading(true);
       try {
         const reqInfo = await get('/coord/info')
         setPeriod(reqInfo.data[0])
@@ -43,10 +45,17 @@ export default function AnswerForm() {
         const reqAnswers = await get(`/coord/formulary/${id}/answers`)
         setAnswers(reqAnswers.data)
       } catch (error) {
+        setIsError(true);
         setSnackbarStatus({
           open: true,
           message: "Ocorreu um erro no carregamento."
         })
+      } finally {
+        setIsLoading(false);
+        setSnackbarStatus({
+          open: true,
+          message: "Por favor, selecione professor e disciplina.",
+        });
       }
     }
     id && fetchData()

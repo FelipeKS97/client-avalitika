@@ -30,7 +30,7 @@ export default function ReportComments({ data }) {
     <>
       {data &&
         data.map((comment) => {
-          return (
+          if(comment.text) return (
             <Timeline align="left">
               <TimelineItem>
                 <TimelineOppositeContent style={{ display: "none" }} />
