@@ -5,7 +5,7 @@ import Chip from "@material-ui/core/Chip";
 import * as variables from "../../../config/variables";
 import store from "../../stores/form-store";
 import { items } from "../../../config/form-items";
-import Demobar from "./demobar";
+import FormActionBar from "./form-action-bar";
 import FormBuilder from "./index.jsx";
 import MainContent from "../main/MainContent";
 import { axiosInstance as axios } from "../../../config/axios";
@@ -77,7 +77,7 @@ export default function FormContainer() {
           </div>
         )}
         {handleUpdate()}
-        <Demobar formData={form} setIsUpdate={setIsUpdate} />
+        <FormActionBar formData={form} setIsUpdate={setIsUpdate} />
         <FormBuilder.ReactFormBuilder
           variables={variables}
           toolbarItems={items}
