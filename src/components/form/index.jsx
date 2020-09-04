@@ -48,7 +48,7 @@ class ReactFormBuilder extends React.Component {
       <DndProvider backend={HTML5Backend}>
        <div>
          <div className="react-form-builder clearfix">
-           <div>
+           <div style={{display: 'flex'}}>
              <Preview files={this.props.files}
                 manualEditModeOff={this.manualEditModeOff.bind(this)}
                 showCorrectColumn={this.props.showCorrectColumn}
@@ -61,8 +61,8 @@ class ReactFormBuilder extends React.Component {
                 editModeOn={this.editModeOn}
                 editMode={this.state.editMode}
                 variables={this.props.variables}
-                editElement={this.state.editElement} 
-                formId={this.props.id} 
+                editElement={this.state.editElement}
+                formId={this.props.id}
               />
               {!published_at && <Toolbar {...toolbarProps} />}
            </div>

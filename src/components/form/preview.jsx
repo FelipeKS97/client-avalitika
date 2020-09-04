@@ -36,6 +36,8 @@ export default class Preview extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    // All of the automatic saving operations to the form has been removed.
+    // If you wish this behavior, just uncomment the line(s) bellow.
     // if (this.props.data !== nextProps.data) {
     //   store.dispatch('saveForm', nextProps.data, testID);
     // }
@@ -87,7 +89,9 @@ export default class Preview extends Component {
 
     if (found) {
       this.seq = this.seq > 100000 ? 0 : this.seq + 1;
-      store.dispatch('saveForm', data, formId);
+      // All of the automatic saving operations to the form has been removed.
+      // If you wish this behavior, just uncomment the line(s) bellow.
+      //store.dispatch('saveForm', data, formId);
     }
   }
 
@@ -134,6 +138,8 @@ export default class Preview extends Component {
       },
     });
     this.setState(newData);
+    // All of the automatic saving operations to the form has been removed.
+    // If you wish this behavior, just uncomment the line(s) bellow.
     // store.dispatch('saveForm', newData.data, testID);
   }
 
@@ -194,7 +200,7 @@ export default class Preview extends Component {
       { published_at && published_at.length > 0 ?
         this.renderNoEdit(published_at)
       :
-      <div style={{marginLeft: '3rem'}} className={classes}>
+      <div style={{margin: window.outerWidth > 762 ? '0rem 3rem' : '0'}} className={classes}>
         <div className="edit-form" ref={this.editForm}>
           { this.props.editElement !== null &&
             <FormElementsEdit
