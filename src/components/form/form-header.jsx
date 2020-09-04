@@ -60,7 +60,7 @@ export default function EditFormHeader({ isCreate, formData, setIsUpdate, setSna
         const reqInfo = await get('/coord/info')
         setPeriodList([reqInfo.data[0]])
         const reqCurricula = await get(`/coord/curricula?course_id=${reqInfo.data[1].course_id}`)
-        setCurriculumList(reqCurricula.data)    
+        setCurriculumList(reqCurricula.data)
       } catch (error) {
         setIsError(true);
       } finally {
@@ -94,12 +94,12 @@ export default function EditFormHeader({ isCreate, formData, setIsUpdate, setSna
       try {
         const reqForm = await post(`/coord/formulary`, obj)
         handleClose()
-        push(`/forms/${reqForm.data.id}`)     
+        push(`/forms/${reqForm.data.id}`)
       } catch (error) {
         setIsError(true)
         handleClose()
-        setSnackbarStatus({ 
-          open: true, 
+        setSnackbarStatus({
+          open: true,
           message: "Ocorreu um erro, tente mais tarde."
         })
       } finally {
@@ -122,12 +122,12 @@ export default function EditFormHeader({ isCreate, formData, setIsUpdate, setSna
         const reqForm = await put(`/coord/formulary/${formData.id}`, obj)
         setIsUpdate(true)
         handleClose()
-        replace(`/forms/${formData.id}`)   
+        replace(`/forms/${formData.id}`)
       } catch (error) {
         setIsError(true)
         handleClose()
-        setSnackbarStatus({ 
-          open: true, 
+        setSnackbarStatus({
+          open: true,
           message: "Ocorreu um erro, tente mais tarde."
         })
       }
@@ -137,15 +137,35 @@ export default function EditFormHeader({ isCreate, formData, setIsUpdate, setSna
     }
   }
 
+  const handleDelete = async () => {
+    setIsError(false);
+    setIsLoading(true);
+    try {
+      const delForm = await axios.delete(`/coord/formulary/${formData.id}`)
+      setIsUpdate(true)
+      push(`/forms`)
+    } catch (error) {
+      setSnackbarStatus({
+        open: true,
+        message: "Ocorreu um erro, tente mais tarde."
+      })
+      setIsError(true)
+    }
+    finally {
+      handleClose()
+      setIsLoading(false);
+    }
+  }
+
 
   return (
     <div>
       { isCreate ?
         <Tooltip title="Novo Formulário">
-          <Fab  
-            onClick={handleClickOpen} 
-            className={classes.fab} 
-            color="primary" 
+          <Fab
+            onClick={handleClickOpen}
+            className={classes.fab}
+            color="primary"
             aria-label="Novo Formulário"
           >
             <AddIcon />
@@ -164,22 +184,22 @@ export default function EditFormHeader({ isCreate, formData, setIsUpdate, setSna
             </IconButton>
             {
               isCreate ?
-              <> 
-              <Typography variant="h6" className={classes.title}>
-                Novo Formulário
-              </Typography>
-              <Button autoFocus color="inherit" onClick={handleCreate}>
-                Criar
-              </Button>
+              <>
+                <Typography variant="h6" className={classes.title}>
+                  Novo Formulário
+                </Typography>
+                <Button autoFocus color="inherit" onClick={handleCreate}>
+                  Criar
+                </Button>
               </>
               :
               <>
-              <Typography variant="h6" className={classes.title}>
-               Cabeçalho do Formulário
-              </Typography>
-              <Button autoFocus color="inherit" onClick={handleEdit}>
-                Editar
-              </Button>
+                <Typography variant="h6" className={classes.title}>
+                  Cabeçalho do Formulário
+                </Typography>
+                <Button autoFocus color="inherit" onClick={handleEdit}>
+                  Editar
+                </Button>
               </>
             }
           </Toolbar>
@@ -205,6 +225,14 @@ export default function EditFormHeader({ isCreate, formData, setIsUpdate, setSna
             {periodList.length > 0 && PeriodSelect}
           </ListItem>
         </List>
+        {!isCreate &&
+          <div style={{margin: "auto 0px 10px 10px"}}>
+            <Divider />
+            <Button variant="outlined" color="secondary" onClick={handleDelete}>
+              Excluir Formulário
+            </Button>
+          </div>
+        }
       </Dialog>
     </div>
   );

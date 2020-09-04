@@ -56,6 +56,7 @@ export default function FormActionBar(props) {
         <EditFormHeader
           setIsUpdate={props.setIsUpdate}
           formData={props.formData}
+          setSnackbarStatus={props.setSnackbarStatus}
         />
       }
 

@@ -8,6 +8,7 @@ import { items } from "../../../config/form-items";
 import FormActionBar from "./form-action-bar";
 import FormBuilder from "./index.jsx";
 import MainContent from "../main/MainContent";
+import useCustomSnackbar from '../../hooks/CustomSnackbar'
 import { axiosInstance as axios } from "../../../config/axios";
 
 export default function FormContainer() {
@@ -17,28 +18,28 @@ export default function FormContainer() {
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
+  const [snackbar, setSnackbarStatus] = useCustomSnackbar()
   const [form, setForm] = useState();
   const { get } = axios;
 
+  const fetchData = async () => {
+    setIsError(false);
+    setIsLoading(true);
+    try {
+      const reqForm = await get(`/coord/formulary/${id}`);
+      setForm(reqForm.data);
+      setIsError(false)
+    } catch (error) {
+      if (error.response.status === 404) {
+        push("/forms");
+      }
+      setIsError(true);
+    } finally {
+      setIsLoading(false)
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsError(false);
-      setIsLoading(true);
-      try {
-        const reqForm = await get(`/coord/formulary/${id}`);
-        setForm(reqForm.data);
-        setIsError(false)
-      } catch (error) {
-        if (error.response.status === 404) {
-          push("/forms");
-        }
-        setIsError(true);
-      } finally {
-        setIsLoading(false)
-      }
-    };
-
     fetchData();
   }, []);
 
@@ -77,12 +78,13 @@ export default function FormContainer() {
           </div>
         )}
         {handleUpdate()}
-        <FormActionBar formData={form} setIsUpdate={setIsUpdate} />
+        <FormActionBar setSnackbarStatus={setSnackbarStatus} formData={form} setIsUpdate={setIsUpdate} />
         <FormBuilder.ReactFormBuilder
           variables={variables}
           toolbarItems={items}
           id={id}
         />
+        {snackbar}
       </MainContent>
     </>
   );
