@@ -55,7 +55,6 @@ function CustomRoute({ component: Component, ...rest}) {
       }
     };
     fetchLogged();
-    console.log(localStorage.getItem('auth_token'))
   }, [user]);
   return (
     <Route

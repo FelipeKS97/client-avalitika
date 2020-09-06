@@ -5,6 +5,10 @@ npm-debug.log*
 .idea/
 .DS_Store
 
+# Environment variable files
+.env
+.env.development
+.env.production
 
 # Runtime data
 pids
