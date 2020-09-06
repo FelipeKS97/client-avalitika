@@ -1,7 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
@@ -47,6 +46,7 @@ export default function FormCard({
   status,
   published_at,
   published_until,
+  setIsLoading,
   setSnackbarStatus
 }) {
   const classes = useStyles()
@@ -56,6 +56,8 @@ export default function FormCard({
     published_at,
     published_until,
     isStudent,
+    isLoading,
+    setIsLoading,
     setSnackbarStatus
   }
 
@@ -73,15 +75,22 @@ export default function FormCard({
         </Typography>
       </CardContent>
       <CardActions>
-      {isLoading ? <Skeleton animation="wave" />
-        : !isError && haveContent && <ActionButtons {...actionProps} />
-      }
+      {!isError && haveContent && <ActionButtons {...actionProps} />}
       </CardActions>
     </Card>
   );
 }
 
-function ActionButtons({ id, status, published_at, published_until, isStudent, setSnackbarStatus }) {
+function ActionButtons({
+  id,
+  status,
+  published_at,
+  published_until,
+  isStudent,
+  isLoading,
+  setIsLoading,
+  setSnackbarStatus
+}) {
   const { push } = useHistory()
   const { path } = useRouteMatch()
   return (
@@ -89,6 +98,7 @@ function ActionButtons({ id, status, published_at, published_until, isStudent, s
       {!isStudent ?
         <>
           <Button
+            disabled={isLoading}
             color="primary"
             variant="outlined"
             onClick={() => push(`${path}/${id}`)}
@@ -98,8 +108,10 @@ function ActionButtons({ id, status, published_at, published_until, isStudent, s
           <AlertPublish
             id={id}
             status={status}
+            isLoading={isLoading}
             published_at={published_at}
             published_until={published_until}
+            setIsLoading={setIsLoading}
             setSnackbarStatus={setSnackbarStatus}
           />
         </>

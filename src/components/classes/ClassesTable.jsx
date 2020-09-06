@@ -89,6 +89,7 @@ export default function RenderTable(props) {
       classes: newClasses,
       disc_array
     }
+    setIsLoading(true)
     try {
       const reqClasses = await post(`/coord/classes`, obj)
       setSnackbarStatus({
@@ -100,6 +101,8 @@ export default function RenderTable(props) {
         open: true,
         message: "Ocorreu um erro no salvamento. Tente novamente mais tarde."
       })
+    } finally {
+      setIsLoading(false)
     }
   }
   const columnClasses = [
@@ -133,6 +136,7 @@ export default function RenderTable(props) {
           onClick={() => handleSave(newClassList, period)}
           variant="contained"
           color="primary"
+          disabled={isLoading}
           startIcon={<SaveOutlinedIcon />}
         >
           Salvar

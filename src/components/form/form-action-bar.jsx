@@ -55,6 +55,7 @@ export default function FormActionBar(props) {
       { props.formData && !props.formData.published_at &&
         <EditFormHeader
           setIsUpdate={props.setIsUpdate}
+          setIsLoading={props.setIsLoading}
           formData={props.formData}
           setSnackbarStatus={props.setSnackbarStatus}
         />

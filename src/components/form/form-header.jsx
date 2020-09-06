@@ -15,6 +15,7 @@ import Slide from '@material-ui/core/Slide';
 import Fab from '@material-ui/core/Fab';
 import Tooltip from '@material-ui/core/Tooltip';
 import AddIcon from '@material-ui/icons/Add';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 import useSelect from '../../hooks/CustomSelect'
@@ -40,13 +41,12 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function EditFormHeader({ isCreate, formData, setIsUpdate, setSnackbarStatus }) {
+export default function EditFormHeader({ isCreate, isLoading, setIsLoading, formData, setIsUpdate, setSnackbarStatus }) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('')
   const [periodList, setPeriodList] = useState([])
   const [curriculumList, setCurriculumList] = useState([])
-  const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const { path, url } = useRouteMatch();
   const { push, replace } = useHistory()
@@ -102,10 +102,14 @@ export default function EditFormHeader({ isCreate, formData, setIsUpdate, setSna
           open: true,
           message: "Ocorreu um erro, tente mais tarde."
         })
-      } finally {
-        setIsLoading(false);
       }
+    } else {
+      setSnackbarStatus({
+        open: true,
+        message: "Por favor, preencha todos os campos."
+      })
     }
+    setIsLoading(false);
   }
 
   const handleEdit = async () => {
@@ -131,10 +135,13 @@ export default function EditFormHeader({ isCreate, formData, setIsUpdate, setSna
           message: "Ocorreu um erro, tente mais tarde."
         })
       }
-      finally {
-        setIsLoading(false);
-      }
+    } else {
+      setSnackbarStatus({
+        open: true,
+        message: "Por favor, preencha todos os campos."
+      })
     }
+    setIsLoading(false);
   }
 
   const handleDelete = async () => {
@@ -150,8 +157,7 @@ export default function EditFormHeader({ isCreate, formData, setIsUpdate, setSna
         message: "Ocorreu um erro, tente mais tarde."
       })
       setIsError(true)
-    }
-    finally {
+    } finally {
       handleClose()
       setIsLoading(false);
     }
@@ -188,18 +194,24 @@ export default function EditFormHeader({ isCreate, formData, setIsUpdate, setSna
                 <Typography variant="h6" className={classes.title}>
                   Novo Formulário
                 </Typography>
-                <Button autoFocus color="inherit" onClick={handleCreate}>
-                  Criar
-                </Button>
+                { isLoading ?
+                  'Carregando...' :
+                  <Button autoFocus color="inherit" onClick={handleCreate}>
+                      Criar
+                  </Button>
+                }
               </>
               :
               <>
                 <Typography variant="h6" className={classes.title}>
                   Cabeçalho do Formulário
                 </Typography>
-                <Button autoFocus color="inherit" onClick={handleEdit}>
-                  Editar
-                </Button>
+                { isLoading ?
+                  'Carregando...' :
+                  <Button autoFocus color="inherit" onClick={handleEdit}>
+                      Editar
+                  </Button>
+                }
               </>
             }
           </Toolbar>
@@ -227,8 +239,7 @@ export default function EditFormHeader({ isCreate, formData, setIsUpdate, setSna
         </List>
         {!isCreate &&
           <div style={{margin: "auto 0px 10px 10px"}}>
-            <Divider />
-            <Button variant="outlined" color="secondary" onClick={handleDelete}>
+            <Button variant="outlined" color="secondary" onClick={() => handleDelete()}>
               Excluir Formulário
             </Button>
           </div>

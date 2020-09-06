@@ -53,7 +53,7 @@ export default function FormListContainer() {
   const isEmpty = !isError && !isLoading
 
   return (
-    <MainContent title={'Semestre Atual: 2020.1'}>
+    <MainContent title={'Formulários'}>
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3} direction="row">
           {haveContent ?
@@ -63,6 +63,7 @@ export default function FormListContainer() {
                   setSnackbarStatus={setSnackbarStatus}
                   isError={isError}
                   isLoading={isLoading}
+                  setIsLoading={setIsLoading}
                   haveContent={haveContent}
                   {...el}
                 />
@@ -75,6 +76,7 @@ export default function FormListContainer() {
                   <FormCard
                     isError={isError}
                     isLoading={isLoading}
+                    setIsLoading={setIsLoading}
                     haveContent={haveContent}
                   />
                 </Grid>
@@ -83,7 +85,12 @@ export default function FormListContainer() {
             </>
         }
           </Grid>
-          <EditFormHeader setSnackbarStatus={setSnackbarStatus} isCreate/>
+          <EditFormHeader
+            setIsLoading={setIsLoading}
+            setSnackbarStatus={setSnackbarStatus}
+            isLoading={isLoading}
+            isCreate
+          />
           {snackbar}
       </Container>
     </MainContent>

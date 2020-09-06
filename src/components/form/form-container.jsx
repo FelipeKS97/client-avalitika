@@ -78,7 +78,7 @@ export default function FormContainer() {
           </div>
         )}
         {handleUpdate()}
-        <FormActionBar setSnackbarStatus={setSnackbarStatus} formData={form} setIsUpdate={setIsUpdate} />
+        <FormActionBar setIsLoading={setIsLoading} setSnackbarStatus={setSnackbarStatus} formData={form} setIsUpdate={setIsUpdate} />
         <FormBuilder.ReactFormBuilder
           variables={variables}
           toolbarItems={items}
