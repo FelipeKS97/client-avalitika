@@ -23,7 +23,7 @@ export const NoContent = props => (
       xmlnsXlink="http://www.w3.org/1999/xlink"
       width={600}
       height={500}
-      style={{margin: ' 0px 100px 0px 0px'}}
+      style={{margin: ' 0px 100px 0px 0px', opacity: '80%'}}
       {...props}
     >
       <defs>

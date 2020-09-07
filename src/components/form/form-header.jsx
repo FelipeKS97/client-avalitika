@@ -55,7 +55,6 @@ export default function EditFormHeader({ isCreate, isLoading, setIsLoading, form
   useEffect(() => {
     const fetchData = async () => {
       setIsError(false);
-      setIsLoading(true);
       try {
         const reqInfo = await get('/coord/info')
         setPeriodList([reqInfo.data[0]])
@@ -63,8 +62,6 @@ export default function EditFormHeader({ isCreate, isLoading, setIsLoading, form
         setCurriculumList(reqCurricula.data)
       } catch (error) {
         setIsError(true);
-      } finally {
-        setIsLoading(false);
       }
     }
     fetchData()
