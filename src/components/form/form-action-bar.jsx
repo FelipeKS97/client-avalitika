@@ -41,8 +41,18 @@ export default function FormActionBar(props) {
     setPreviewVisible(false)
   }
 
+  const smallWidth = window.outerWidth < 768
+
   return (
-    <div className="clearfix" style={{ padding: '1rem 1rem 1rem 3rem', width: '70%', display: 'flex', justifyContent: 'flex-end'}}>
+    <div
+      className="clearfix"
+      style={{
+        padding: smallWidth ? '10px' : '1rem 1rem 1rem 3rem',
+        margin: smallWidth ? 'auto' : '',
+        width: '70%',
+        display: 'flex',
+        justifyContent: 'flex-end'
+      }}>
       <Button
         variant="outlined"
         color="primary"

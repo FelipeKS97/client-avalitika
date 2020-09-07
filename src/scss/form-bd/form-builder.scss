@@ -312,20 +312,24 @@
 
       h4 {
         padding: 10px;
-        background: #7a0019;
+        background: #1A1C4A;
         color: #fff;
       }
 
       width: 100%;
       position: fixed;
       z-index: 900;
-      bottom: -320px;
+      //bottom: -320px;
+      bottom: -55%;
 
       -webkit-transition: transform 0.5s;
       transition: transform 0.5s;
 
-      -webkit-transform: translate(0,0);
-      transform: translate(0,0);
+      // -webkit-transform: translate(0,0);
+      // transform: translate(0,0);
+
+      -webkit-transform: translate(0, 35%);
+      transform: translate(0, 35%);
 
       right: 0;
       border-top: 2px solid #ccc;
@@ -336,9 +340,13 @@
       }
     }
 
+    // .active-toolbar {
+    //   -webkit-transform: translate(0,-300px);
+    //   transform: translate(0,-300px);
+    // }
     .active-toolbar {
-      -webkit-transform: translate(0,-300px);
-      transform: translate(0,-300px);
+      -webkit-transform: translate(0, 0);
+      transform: translate(0, 0);
     }
   }
 

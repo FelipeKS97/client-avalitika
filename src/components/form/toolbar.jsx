@@ -14,6 +14,7 @@ export default class Toolbar extends React.Component {
     const items = this.props.items ? this.props.items : this._defaultItems();
     this.state = {
       items,
+      activeToolbar: false
     };
     store.subscribe((state) => this.setState({ store: state }));
   }
@@ -358,12 +359,20 @@ export default class Toolbar extends React.Component {
   }
 
   render() {
+    let toolbarClass = "react-form-builder-toolbar pull-right"
+
+    if(this.state.activeToolbar) {
+      toolbarClass += " active-toolbar"
+    }
+
     return (
       <div
         style={{ padding: "1rem", borderRadius: "8px", height: "100%" }}
-        className="react-form-builder-toolbar pull-right"
+        className={toolbarClass}
       >
-        <h4>Caixa de Ferramentas</h4>
+        <h4 onClick={() => this.setState({activeToolbar: !this.state.activeToolbar})}>
+          Caixa de Ferramentas
+        </h4>
         <ul>
           {this.state.items.map((item) => (
             <ToolbarItem
