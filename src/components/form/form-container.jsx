@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import Chip from "@material-ui/core/Chip";
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
 
+import { useStyles } from "./formStyles";
 import * as variables from "../../../config/variables";
 import store from "../../stores/form-store";
 import { items } from "../../../config/form-items";
@@ -12,6 +15,7 @@ import useCustomSnackbar from '../../hooks/CustomSnackbar'
 import { axiosInstance as axios } from "../../../config/axios";
 
 export default function FormContainer() {
+  const classes = useStyles();
   const { id } = useParams();
   const { push } = useHistory();
   const { title } = store.state;
@@ -57,34 +61,34 @@ export default function FormContainer() {
           <div
             style={{
               width: '100%',
-              margin: '1rem',
-              paddingLeft: '1.6rem',
+              margin: '1rem 0.5rem',
               paddingBottom: '1.5rem',
+              paddingLeft: window.outerWidth > 768 ? '25px' : '0px',
               fontSize: '14px'
             }}
           >
             <Chip
               style={{ marginLeft: '10px', fontSize: '14px'}}
-              variant="outlined"
               color="primary"
-              label={form.period.description}
+              label={`Período: ${form.period.description}`}
             />
             <Chip
               style={{ marginLeft: '10px', fontSize: '14px'}}
-              variant="outlined"
               color="primary"
-              label={form.curriculum.name}
+              label={`Grade Curricular: ${form.curriculum.name}`}
             />
           </div>
         )}
-        {handleUpdate()}
-        <FormActionBar setIsLoading={setIsLoading} setSnackbarStatus={setSnackbarStatus} formData={form} setIsUpdate={setIsUpdate} />
-        <FormBuilder.ReactFormBuilder
-          variables={variables}
-          toolbarItems={items}
-          id={id}
-        />
-        {snackbar}
+        <Container maxWidth="lg" className={classes.container}>
+          {handleUpdate()}
+          <FormActionBar setIsLoading={setIsLoading} setSnackbarStatus={setSnackbarStatus} formData={form} setIsUpdate={setIsUpdate} />
+          <FormBuilder.ReactFormBuilder
+            variables={variables}
+            toolbarItems={items}
+            id={id}
+          />
+          {snackbar}
+        </Container>
       </MainContent>
     </>
   );

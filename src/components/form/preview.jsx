@@ -200,7 +200,7 @@ export default class Preview extends Component {
       { published_at && published_at.length > 0 ?
         this.renderNoEdit(published_at)
       :
-      <div style={{margin: window.outerWidth > 762 ? '0rem 3rem' : '0'}} className={classes}>
+      <div style={{margin: window.outerWidth > 768 ? '0rem 3rem' : '0'}} className={classes}>
         <div className="edit-form" ref={this.editForm}>
           { this.props.editElement !== null &&
             <FormElementsEdit
@@ -215,9 +215,12 @@ export default class Preview extends Component {
         </div>
         <div className="Sortable">{items}</div>
           { this.state.isLoading ?
-            <div style={{display: 'flex', justifyContent: 'center'}}>
-              <CircularProgress color="inherit" />
-            </div>
+              <PlaceHolder
+              id="loading-form-place-holder"
+              show
+              text="Aguarde, carregando..."
+              />
+
             :
               <PlaceHolder
               id="form-place-holder"
