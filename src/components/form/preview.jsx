@@ -91,7 +91,7 @@ export default class Preview extends Component {
       this.seq = this.seq > 100000 ? 0 : this.seq + 1;
       // All of the automatic saving operations to the form has been removed.
       // If you wish this behavior, just uncomment the line(s) bellow.
-      //store.dispatch('saveForm', data, formId);
+      store.dispatch('saveForm', data, formId);
     }
   }
 
