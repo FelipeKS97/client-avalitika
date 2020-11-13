@@ -34,7 +34,8 @@ const formStore = new Store({
     },
 
     saveForm(context, elements) {
-      this.setData(context, elements, true);
+      let haveUpdate = !!elements.json_format
+      this.setData(context, elements, haveUpdate);
     },
 
     async save(context, data) {
