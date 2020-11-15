@@ -8,41 +8,39 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { AuthContext } from "./AuthProvider";
 import { useHistory } from "react-router-dom";
+import { FormatListBulleted } from "@material-ui/icons";
+import { axiosInstance as axios } from '../../../config/axios'
 
-const fixed_logins = [
-  {
-    username: "teste",
-    password: "123",
-  },
-  {
-    username: "teste@teste.com",
-    password: "12",
-  },
-];
-
-export default function LoginDialog({ openModalLogin, setOpenModalLogin,  }) {
+export default function LoginDialog({ openModalLogin, setOpenModalLogin }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { push } = useHistory();
   const [user, setUser] = useContext(AuthContext);
   const [error, setError] = useState(false);
 
-  const handleLogin = () => {
-    // As here is just an example, we have some fixed credentials.
-    const hasLogin = fixed_logins.some(
-      (fixed) => fixed.username === username && fixed.password === password
-    );
-
-    if(hasLogin) {
-      setError(false)
-      const exampleToken = new Date().getTime();
-      setUser(true);
-      localStorage.setItem("auth_token", exampleToken);
-      setOpenModalLogin(false);
-      push("/dashboard");
-    } else {
-      setError(true)
+  const handleLogin = async () => {
+    // As here is just an example, we have simulated a simple login.
+    const credentials = { email: username, password }/*  */
+    try {
+        const login = await axios.post('/auth/login', credentials)
+        if(login.data.data.token.length > 0) {
+          setError(false);
+          setUser(true);
+          localStorage.setItem("auth_token", login.data.token);
+          setOpenModalLogin(false);
+          push("/dashboard");
+        } else {
+          setError(true)
+        }
+    } catch (error) {
+        // setIsError(true);
+        console.log(error)
+        setError(true)
     }
+    /* finally {
+        setIsLoading(false);
+    }*/
+
   };
 
   const handleCancel = () => {
