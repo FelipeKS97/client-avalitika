@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import Button from "@material-ui/core/Button";
+import CircularProgress from '@material-ui/core/CircularProgress';
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -8,19 +9,21 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { AuthContext } from "./AuthProvider";
 import { useHistory } from "react-router-dom";
-import { FormatListBulleted } from "@material-ui/icons";
 import { axiosInstance as axios } from '../../../config/axios'
+
 
 export default function LoginDialog({ openModalLogin, setOpenModalLogin }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { push } = useHistory();
   const [user, setUser] = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
 
   const handleLogin = async () => {
     // As here is just an example, we have simulated a simple login.
     const credentials = { email: username, password }/*  */
+    setIsLoading(true)
     try {
         const login = await axios.post('/auth/login', credentials)
         if(login.data.data.token.length > 0) {
@@ -37,9 +40,9 @@ export default function LoginDialog({ openModalLogin, setOpenModalLogin }) {
         console.log(error)
         setError(true)
     }
-    /* finally {
+    finally {
         setIsLoading(false);
-    }*/
+    }
 
   };
 
@@ -69,6 +72,7 @@ export default function LoginDialog({ openModalLogin, setOpenModalLogin }) {
             label="Email"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            disabled={isLoading}
             fullWidth
           />
 
@@ -83,11 +87,12 @@ export default function LoginDialog({ openModalLogin, setOpenModalLogin }) {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            disabled={isLoading}
             fullWidth
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => handleCancel()} color="primary">
+          <Button disabled={isLoading} onClick={() => handleCancel()} color="primary">
             Cancelar
           </Button>
           <Button
@@ -96,7 +101,7 @@ export default function LoginDialog({ openModalLogin, setOpenModalLogin }) {
             type="submit"
             color="primary"
           >
-            Entrar
+             { isLoading ? <CircularProgress color="inherit" /> : 'Entrar'}
           </Button>
         </DialogActions>
       </Dialog>
