@@ -16,7 +16,7 @@ export default function ProfSelector({
 
   const actualClasses =
     classes.length > 0 && classes.filter((c) => c.discipline_id === rowData.id);
-    
+
   let filteredClasses =
     actualClasses.length > 0 &&
     actualClasses.map((c) => {
@@ -44,7 +44,7 @@ export default function ProfSelector({
       return {
         prof_name: p.fullname,
         discipline_id: rowData.id,
-        professor_id: p.user_id,
+        professor_id: p.id,
       };
     });
   }
