@@ -51,7 +51,7 @@
     "react-star-rating": "^1.4.2",
     "react-textarea-autosize": "^7.1.2",
     "react-virtualized": "^9.21.2",
-    "recharts": "^1.8.5",
+    "recharts": "^2.1.14",
     "typeface-roboto": "0.0.75",
     "xss": "^1.0.6"
   },
